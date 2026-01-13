@@ -1,3 +1,19 @@
+import LandingHeader from "@/components/features/landing-page/LandingHeader";
+import { AppBrand } from "@/components/shared/AppBrand";
+
 export default function LandingPage() {
-  return <h1>Landing Page</h1>;
+  return (
+    <div className="bg-yellow-4 h-full flex flex-col">
+      <AppBrand />
+      {/* <LandingHeader />
+      <LandingHeaderTitle />
+      <LandingUseCases />
+      <LandingPreHero />
+      <LandingSecuritySection />
+      <LandingHero />
+      <LandingGetInTouch />
+      <LandingTestimonials />
+      <LandingFooter /> */}
+    </div>
+  );
 }
