@@ -3,6 +3,110 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --animate-rotate: rotate 30s linear infinite;
+  --font-dm-sans: var(--font-dm-sans);
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  --breakpoint-2xs: 8rem;
+  --breakpoint-xs: 30rem;
+
+  --color-off-gray: #8d8d8d;
+  --color-off-black: #1f1f1f;
+  --color-black-003: #8f8f8f;
+  --color-black-004: #6a6a6a;
+  --color-black-005: #444444;
+  --color-dominant-purple-main: #673147;
+  --color-accent-purple-001: #efe1ef;
+  --color-purple-001: #e1d6da;
+  --color-light-outline: #eaeaea;
+
+  --color-brown-2: #ccbac2;
+  --color-black-1: #1f2223;
+
+  --color-gray-1: #e5e5e5;
+  --color-gray-2: #0a0104;
+  --color-gray-3: #e8e8ea;
+  --color-gray-4: #d8d9dc;
+  --color-gray-5: #9ea1a7;
+  --color-gray-6: #f2f3f3;
+  --color-gray-7: #555555;
+  --color-gray-8: #5a5a5a;
+  --color-gray-9: #e5e7eb;
+  --color-gray-01: #f6f6f6;
+  --color-gray-02: #030213;
+  --color-gray-03: #f9fafb;
+  --color-gray-04: #f3f4f6;
+
+  --color-green-1: #009900;
+
+  --color-purple-1: #8a38f5;
+  --color-purple-2: #b398a3;
+  --color-purple-4: #fef2f8;
+  --color-purple-5: #fff5ff;
+  --color-purple-6: #eee0ff;
+  --color-purple-7: #fff4ff;
+  --color-purple-9: #e5cee5;
+  --color-purple-01: #faf5ff;
+  --color-purple-02: #e9d4ff;
+  --color-purple-03: #e8d5eb;
+  --color-purple-04: #f8f4f9;
+
+  --color-red-1: #d4183d;
+  --color-red-2: #ffe2e2;
+  --color-red-3: #e7000b;
+  --color-red-error: #eb3538;
+
+  --color-yellow-1: #fbbc05;
+  --color-yellow-2: #ffee99;
+  --color-yellow-3: #fffae0;
+  --color-yellow-4: #fffdf4;
+  --color-yellow-5: #ce8100;
+}
+
+@layer utilities {
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+    /* WebKit-based browsers */
+  }
+
+  .scrollbar-visible {
+    scrollbar-width: thin;
+    /* Firefox */
+    -ms-overflow-style: auto;
+    /* Internet Explorer 10+ */
+  }
+
+  .scrollbar-visible::-webkit-scrollbar {
+    display: block;
+    /* WebKit-based browsers */
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.transition-ease {
+  transition: all ease 0.25s;
+}
+
 body {
   background-color: white;
 }
