@@ -1,0 +1,60 @@
+"use client";
+import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+type CreateSlideShowControlsProps = {
+  totalItems?: number;
+  currentIndex?: number;
+  canPrev?: boolean;
+  canNext?: boolean;
+  onPrev?: () => void;
+  onNext?: () => void;
+  className?: string;
+};
+
+const CreateSlideShowControls = (props: CreateSlideShowControlsProps) => {
+  const buttonBaseClass =
+    "w-fit h-fit p-4 border-[1px] border-dominant-purple-main rounded-full fill-dominant-purple-main stroke-[1px] stroke-dominant-purple-main";
+  const buttonEnabledClass = "cursor-pointer";
+  const buttonDisabledClass = "cursor-not-allowed opacity-[.5]";
+
+  return (
+    <div className={cn("flex items-center justify-between", props.className)}>
+      <div
+        onClick={props.onPrev}
+        className={cn(
+          buttonBaseClass,
+          props.canPrev ? buttonEnabledClass : buttonDisabledClass
+        )}
+      >
+        <ChevronLeft />
+      </div>
+
+      <div className="flex items-center justify-center">
+        {Array.from({ length: props.totalItems || 0 }).map((_, i) => (
+          <div
+            key={i}
+            className={cn(
+              "mx-1 w-0 h-0 p-1 box-content rounded-full transition-ease",
+              i === props.currentIndex
+                ? "px-3 bg-dominant-purple-main"
+                : "bg-brown-2"
+            )}
+          />
+        ))}
+      </div>
+
+      <div
+        onClick={props.onNext}
+        className={cn(
+          buttonBaseClass,
+          props.canNext ? buttonEnabledClass : buttonDisabledClass
+        )}
+      >
+        <ChevronRight />
+      </div>
+    </div>
+  );
+};
+
+export default CreateSlideShowControls;
