@@ -1,16 +1,14 @@
 "use client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { API } from "@/lib/api";
 import { auth } from "@/firebase/config";
 import { getFirebaseErrorMessage } from "@/lib/firebase-errors";
-import type { User } from "@/types/global-types";
+import Cookie from "js-cookie";
 
 export const useSignInMutation = () => {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({
@@ -25,18 +23,18 @@ export const useSignInMutation = () => {
         email,
         password
       );
-      const token = await userCredential.user.getIdToken(true);
-      return token;
+      // Force token refresh to ensure fresh token
+      await userCredential.user.getIdToken(true);
+      Cookie.set("fb_user_id", userCredential.user.uid);
+      return userCredential.user;
     },
-    onSuccess: async (token) => {
-      // Fetch user data
-      const response = await API.get<User>("/users/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      queryClient.setQueryData(["auth", "me"], response.data);
+    onSuccess: () => {
       toast.success("Signed in successfully");
-      // router.push("/dashboard");
+      if (localStorage.getItem("newUser")) {
+        router.push("/onboarding");
+      } else {
+        router.push("/home");
+      }
     },
     onError: (error: unknown) => {
       const errorMessage = getFirebaseErrorMessage(

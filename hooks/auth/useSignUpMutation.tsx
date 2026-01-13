@@ -1,16 +1,15 @@
 "use client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { toast } from "sonner";
 import { API } from "@/lib/api";
 import { auth } from "@/firebase/config";
 import { getFirebaseErrorMessage } from "@/lib/firebase-errors";
 import type { User } from "@/types/global-types";
+import { useRouter } from "next/navigation";
 
 export const useSignUpMutation = () => {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({
@@ -29,21 +28,16 @@ export const useSignUpMutation = () => {
         email,
         password
       );
-      const token = await userCredential.user.getIdToken(true);
-      return { token, email, name, phone_number };
+      // Force token refresh to ensure fresh token
+      await userCredential.user.getIdToken(true);
+      return { email, name, phone_number };
     },
-    onSuccess: async ({ token, email, name, phone_number }) => {
-      // Create user in backend
+    onSuccess: async ({ email, name, phone_number }) => {
       const body: User = { email, name, phone_number };
-      const response = await API.post<{ message: string; user: User }>(
-        "/users/create",
-        body,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      queryClient.setQueryData(["auth", "me"], response.data.user);
+      await API.post<{ message: string; user: User }>("/users/create", body);
+      await signOut(auth);
       toast.success("Account created successfully");
+      localStorage.setItem("newUser", "true");
       router.push("/auth/sign-in");
     },
     onError: (error: unknown) => {

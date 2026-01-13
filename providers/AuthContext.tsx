@@ -1,17 +1,15 @@
 "use client";
-
-import {
-  User as FirebaseUser,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "@/firebase/config";
+import { API } from "@/lib/api";
+import GlobalLoader from "@/components/shared/GlobalLoader";
 import type { User } from "@/types/global-types";
+import Cookie from "js-cookie";
+import { useRouter } from "next/navigation";
 
 type AuthContextType = {
   user: User | null;
-  firebaseUser: FirebaseUser | null;
   isLoading: boolean;
   signOut: () => Promise<void>;
 };
@@ -26,24 +24,39 @@ export const useAuthContext = () => {
   return context;
 };
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  console.log("🚀 ~ AuthProvider ~ user:", user);
-  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-  console.log("🚀 ~ AuthProvider ~ firebaseUser:", firebaseUser);
   const [isLoading, setIsLoading] = useState(true);
-
+  const router = useRouter();
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setFirebaseUser(firebaseUser);
-
-      if (firebaseUser) {
-        // User is authenticated, but we need to fetch user data from API
-        // This will be handled by useAuthMeQuery
+    const fetchUserData = async (userId: string) => {
+      try {
+        // Token is automatically attached by API interceptor
+        const response = await API.get<User>("/users/me");
+        setUser(response.data);
+        Cookie.set("fb_user_id", userId);
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+        setUser(null);
+      } finally {
         setIsLoading(false);
+      }
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          await fetchUserData(firebaseUser.uid);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+          setUser(null);
+        } finally {
+          setIsLoading(false);
+        }
       } else {
         setUser(null);
         setIsLoading(false);
+        Cookie.remove("fb_user_id");
       }
     });
 
@@ -53,19 +66,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleSignOut = async () => {
     await signOut(auth);
     setUser(null);
-    setFirebaseUser(null);
+    Cookie.remove("fb_user_id");
+    router.push("/auth/sign-in");
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        firebaseUser,
         isLoading,
         signOut: handleSignOut,
       }}
     >
-      {isLoading ? <div>Loading...</div> : children}
+      {isLoading ? <GlobalLoader /> : children}
     </AuthContext.Provider>
   );
-}
+};
+
+export default AuthProvider;
