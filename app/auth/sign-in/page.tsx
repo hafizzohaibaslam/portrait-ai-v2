@@ -6,23 +6,6 @@ import AuthVideoSidebar from "@/components/auth-page/AuthVideoSidebar";
 import SignInForm from "@/components/auth-page/SignInForm";
 
 export default function SignInPage() {
-  // TODO: Connect to auth context
-  const handleEmailChange = (value: string) => {
-    // Connect to context
-  };
-
-  const handlePasswordChange = (value: string) => {
-    // Connect to context
-  };
-
-  const handleSubmit = () => {
-    // Connect to context
-  };
-
-  const handleSsoClick = () => {
-    // Connect to context
-  };
-
   return (
     <div className="bg-purple-4 flex h-screen overflow-y-auto">
       {/* Left Side - Form */}
@@ -34,12 +17,7 @@ export default function SignInPage() {
             Log in to uncover and relive your exciting memories!
           </p>
           <IntroVideoButton className="mt-6 mb-4" />
-          <SignInForm
-            onEmailChange={handleEmailChange}
-            onPasswordChange={handlePasswordChange}
-            onSubmit={handleSubmit}
-            onSsoClick={handleSsoClick}
-          />
+          <SignInForm />
           <AuthFooterLink type="sign-in" className="mt-12" />
         </div>
       </div>

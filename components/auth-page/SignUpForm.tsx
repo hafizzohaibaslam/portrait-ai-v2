@@ -1,6 +1,4 @@
-// src/components/auth/sign-up-form.tsx
 "use client";
-
 import { Info } from "lucide-react";
 import {
   Tooltip,
@@ -12,65 +10,53 @@ import FormInput from "@/components/shared/FormInput";
 import FormPassword from "@/components/shared/FormPassword";
 import ThemedButton from "@/components/shared/ThemedButton";
 import SsoButton from "@/components/auth-page/SsoButton";
+import { useSignUpMutation } from "@/hooks/auth/useSignUpMutation";
+import { toast } from "sonner";
 
 type SignUpFormProps = {
-  // Form state
-  name?: string;
-  phone?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  // Errors
-  nameError?: string;
-  phoneError?: string;
-  emailError?: string;
-  passwordError?: string;
-  confirmPasswordError?: string;
-  // Loading
-  isLoading?: boolean;
-  // Handlers
-  onNameChange?: (value: string) => void;
-  onPhoneChange?: (value: string) => void;
-  onEmailChange?: (value: string) => void;
-  onPasswordChange?: (value: string) => void;
-  onConfirmPasswordChange?: (value: string) => void;
-  onSubmit?: () => void;
-  onSsoClick?: () => void;
   className?: string;
 };
 
-const SignUpForm = ({
-  name,
-  phone,
-  email,
-  password,
-  confirmPassword,
-  nameError,
-  phoneError,
-  emailError,
-  passwordError,
-  confirmPasswordError,
-  isLoading = false,
-  onNameChange,
-  onPhoneChange,
-  onEmailChange,
-  onPasswordChange,
-  onConfirmPasswordChange,
-  onSubmit,
-  onSsoClick,
-  className,
-}: SignUpFormProps) => {
+const SignUpForm = ({ className }: SignUpFormProps) => {
+  const { mutate: signUpMutation, isPending } = useSignUpMutation();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+    const name = formData.get("name") as string;
+    const phone_number = formData.get("phone_number") as string;
+
+    if (!email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+    if (!password.trim()) {
+      toast.error("Password is required");
+      return;
+    }
+    if (!name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+    if (confirmPassword.trim() !== password.trim()) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    signUpMutation({ email, password, name, phone_number });
+  };
   return (
-    <div className={className}>
+    <form onSubmit={handleSubmit} className={className}>
       {/* Form Fields */}
       <div className="space-y-4">
         <FormInput
           label="Full Name"
           type="text"
           placeholder="Full Name"
-          value={name}
-          onChange={onNameChange}
-          error={nameError}
+          name="name"
           variant="white"
         />
 
@@ -100,9 +86,7 @@ const SignUpForm = ({
           }
           type="tel"
           placeholder="Phone Number"
-          value={phone}
-          onChange={onPhoneChange}
-          error={phoneError}
+          name="phone_number"
           variant="white"
         />
 
@@ -110,27 +94,21 @@ const SignUpForm = ({
           label="Email"
           type="email"
           placeholder="Email Address"
-          value={email}
-          onChange={onEmailChange}
-          error={emailError}
+          name="email"
           variant="white"
         />
 
         <FormPassword
           label="Password"
           placeholder="Password"
-          value={password}
-          onChange={onPasswordChange}
-          error={passwordError}
+          name="password"
           variant="white"
         />
 
         <FormPassword
           label="Confirm Password"
           placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={onConfirmPasswordChange}
-          error={confirmPasswordError}
+          name="confirmPassword"
           variant="white"
         />
       </div>
@@ -140,22 +118,17 @@ const SignUpForm = ({
         <ThemedButton
           variant="black"
           className="mt-5 w-full"
-          onClick={onSubmit}
-          loading={isLoading}
-          disabled={isLoading}
+          type="submit"
+          loading={isPending}
+          disabled={isPending}
         >
           Continue with Email
         </ThemedButton>
 
         {/* SSO Button */}
-        <SsoButton
-          type="sign-up"
-          variant="white"
-          className="mt-6 w-full"
-          onClick={onSsoClick}
-        />
+        <SsoButton type="sign-up" variant="white" className="mt-6 w-full" />
       </div>
-    </div>
+    </form>
   );
 };
 

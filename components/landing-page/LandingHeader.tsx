@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { AppBrand } from "@/components/shared/AppBrand";
+import AppBrand from "@/components/shared/AppBrand";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import LandingMobileMenu from "@/components/landing-page/LandingMobileMenu";

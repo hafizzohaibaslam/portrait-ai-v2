@@ -6,54 +6,48 @@ import FormInput from "@/components/shared/FormInput";
 import FormPassword from "@/components/shared/FormPassword";
 import ThemedButton from "@/components/shared/ThemedButton";
 import SsoButton from "@/components/auth-page/SsoButton";
+import { toast } from "sonner";
+import { useSignInMutation } from "@/hooks/auth/useSignInMutation";
 
 type SignInFormProps = {
-  // Form state (will be connected later)
-  email?: string;
-  password?: string;
-  emailError?: string;
-  passwordError?: string;
-  isLoading?: boolean;
-  // Handlers (will be connected later)
-  onEmailChange?: (value: string) => void;
-  onPasswordChange?: (value: string) => void;
-  onSubmit?: () => void;
-  onSsoClick?: () => void;
   className?: string;
 };
 
-const SignInForm = ({
-  email,
-  password,
-  emailError,
-  passwordError,
-  isLoading = false,
-  onEmailChange,
-  onPasswordChange,
-  onSubmit,
-  onSsoClick,
-  className,
-}: SignInFormProps) => {
+const SignInForm = ({ className }: SignInFormProps) => {
+  const { mutate: signInMutation, isPending } = useSignInMutation();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    if (!email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+
+    if (!password.trim()) {
+      toast.error("Password is required");
+      return;
+    }
+
+    signInMutation({ email, password });
+  };
   return (
-    <div className={className}>
+    <form onSubmit={handleSubmit} className={className}>
       {/* Form Fields */}
       <div className="mt-6 space-y-4">
         <FormInput
           label="Email"
           type="email"
           placeholder="Email Address"
-          value={email}
-          onChange={onEmailChange}
-          error={emailError}
+          name="email"
           variant="white"
         />
         <FormPassword
           label="Password"
           placeholder="Password"
-          value={password}
-          onChange={onPasswordChange}
-          onEnter={onSubmit}
-          error={passwordError}
+          name="password"
           variant="white"
         />
       </div>
@@ -69,24 +63,19 @@ const SignInForm = ({
       {/* Submit Button */}
       <div className="mt-5 font-medium">
         <ThemedButton
+          type="submit"
           variant="black"
           className="mt-5 w-full"
-          onClick={onSubmit}
-          loading={isLoading}
-          disabled={isLoading}
+          loading={isPending}
+          disabled={isPending}
         >
           Login with Email
         </ThemedButton>
 
         {/* SSO Button */}
-        <SsoButton
-          type="sign-in"
-          variant="white"
-          className="mt-6 w-full"
-          onClick={onSsoClick}
-        />
+        <SsoButton type="sign-in" variant="white" className="mt-6 w-full" />
       </div>
-    </div>
+    </form>
   );
 };
 

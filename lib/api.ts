@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API = axios.create({
   baseURL:
-    "/https://portrait-ai-backend-staging-789341542834.us-central1.run.app/api",
+    "https://portrait-ai-backend-staging-789341542834.us-central1.run.app/api",
   headers: {
     "Content-Type": "application/json",
   },

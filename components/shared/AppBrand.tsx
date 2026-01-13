@@ -7,7 +7,7 @@ type AppBrandProps = {
   href?: string;
 };
 
-export const AppBrand = ({ className, href = "/" }: AppBrandProps) => {
+const AppBrand = ({ className, href = "/" }: AppBrandProps) => {
   return (
     <Link
       href={href}
@@ -28,3 +28,5 @@ export const AppBrand = ({ className, href = "/" }: AppBrandProps) => {
     </Link>
   );
 };
+
+export default AppBrand;
