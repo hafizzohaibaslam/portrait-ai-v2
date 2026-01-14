@@ -48,7 +48,7 @@ export const useOnboardingFlow = () => {
   }, []);
 
   const skipToDashboard = useCallback(() => {
-    router.push("/home");
+    router.push("/dashboard/portraits");
   }, [router]);
 
   const updatePortraitForm = useCallback(

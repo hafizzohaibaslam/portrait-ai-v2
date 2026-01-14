@@ -25,7 +25,7 @@ export const useGoogleSignInMutation = () => {
         });
         queryClient.setQueryData(["auth", "me"], response.data.user);
         toast.success("Signed in successfully");
-        router.push("/dashboard");
+        router.push("/dashboard/portraits");
       } catch (error: any) {
         // User doesn't exist, create account
         if (error.response?.status === 404) {
@@ -42,7 +42,7 @@ export const useGoogleSignInMutation = () => {
           );
           queryClient.setQueryData(["auth", "me"], createResponse.data.user);
           toast.success("Account created successfully");
-          router.push("/dashboard");
+          router.push("/dashboard/portraits");
         } else {
           throw error;
         }

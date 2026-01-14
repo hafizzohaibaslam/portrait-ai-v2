@@ -33,7 +33,7 @@ export const useSignInMutation = () => {
       if (localStorage.getItem("newUser")) {
         router.push("/onboarding");
       } else {
-        router.push("/home");
+        router.push("/dashboard/portraits");
       }
     },
     onError: (error: unknown) => {
