@@ -5,7 +5,7 @@ import {
   CarouselApi,
   CarouselContent,
   CarouselItem,
-} from "../ui/carousel";
+} from "../../ui/carousel";
 import CreateSlide, { CreateSlideProps } from "./CreateSlide";
 import CreateSlideShowControls from "./CreateSlideShowControls";
 import { cn } from "@/lib/utils";

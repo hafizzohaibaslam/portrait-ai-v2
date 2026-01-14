@@ -5,13 +5,11 @@ import { RelationType } from "@/types/global-types";
 import FormInput from "@/components/shared/FormInput";
 import FormSelect, { SelectOption } from "@/components/shared/FormSelect";
 import ThemedButton from "@/components/shared/ThemedButton";
+import type { CreatePortraitPayloadBase } from "@/types/portrait-types";
 
-type OnboardPortraitFormProps = {
-  onSubmit: (data: {
-    name: string;
-    relation_type: RelationType;
-    is_deceased?: boolean;
-  }) => void;
+type StepPortraitFormProps = {
+  formData?: CreatePortraitPayloadBase;
+  onNext: (data: CreatePortraitPayloadBase) => void;
   onSkip: () => void;
   className?: string;
 };
@@ -31,14 +29,23 @@ const IS_LIVING_OPTIONS: SelectOption[] = [
   { value: "false", label: "No" },
 ];
 
-const OnboardPortraitForm = ({
-  onSubmit,
+const StepPortraitForm = ({
+  formData,
+  onNext,
   onSkip,
   className,
-}: OnboardPortraitFormProps) => {
-  const [name, setName] = useState("");
-  const [relationType, setRelationType] = useState<RelationType | "">("");
-  const [isLiving, setIsLiving] = useState<string>("");
+}: StepPortraitFormProps) => {
+  const [name, setName] = useState(formData?.name || "");
+  const [relationType, setRelationType] = useState<RelationType | "">(
+    formData?.relation_type || ""
+  );
+  const [isLiving, setIsLiving] = useState<string>(
+    formData?.is_deceased === undefined
+      ? ""
+      : formData.is_deceased
+      ? "false"
+      : "true"
+  );
 
   const isRelative = relationType && relationType !== "your-own";
   const isDeceased = isLiving === "false";
@@ -51,10 +58,10 @@ const OnboardPortraitForm = ({
   const handleSubmit = () => {
     if (!isValid || !relationType) return;
 
-    onSubmit({
+    onNext({
       name: name.trim(),
       relation_type: relationType as RelationType,
-      is_deceased: isRelative ? isDeceased : undefined,
+      is_deceased: isRelative ? isDeceased : false,
     });
   };
 
@@ -106,7 +113,7 @@ const OnboardPortraitForm = ({
 
       <ThemedButton
         variant="black"
-        className="mt-8 w-full py-4"
+        className="mt-8 w-full py-4 disabled:hover:bg-off-black disabled:hover:text-white"
         rounded="lg"
         disabled={!isValid}
         onClick={handleSubmit}
@@ -116,7 +123,7 @@ const OnboardPortraitForm = ({
 
       <button
         onClick={onSkip}
-        className="block text-center text-gray-6 mt-6 hover:underline w-full"
+        className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] mt-6 hover:underline w-full cursor-pointer"
         type="button"
       >
         Skip for now
@@ -125,4 +132,4 @@ const OnboardPortraitForm = ({
   );
 };
 
-export default OnboardPortraitForm;
+export default StepPortraitForm;

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 // Button theme variants using CVA
 const buttonThemeVariants = cva(
-  "text-center px-12 py-2 lg:px-8 lg:py-3 border-[1.5px] transition-ease",
+  "text-center px-12 py-2 lg:px-8 lg:py-3 border-[1.5px] transition-ease cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:transition-none",
   {
     variants: {
       variant: {

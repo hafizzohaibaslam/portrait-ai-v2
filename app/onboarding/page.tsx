@@ -1,7 +1,7 @@
 "use client";
 import AppBrand from "@/components/shared/AppBrand";
-import OnboardPortraitForm from "@/components/onboarding-page/OnboardPortraitForm";
-import CreateSlideShow from "@/components/onboarding-page/CreateSlideShow";
+import CreateSlideShow from "@/components/onboarding/slideshow/CreateSlideShow";
+import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import { cn } from "@/lib/utils";
 
 type OnboardingPageProps = { className?: string };
@@ -13,11 +13,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       </div>
 
       <div className="flex lg:px-20 justify-between">
-        <OnboardPortraitForm
-          onSubmit={() => {}}
-          onSkip={() => {}}
-          className="flex-1 px-5 py-10 md:px-10 pb-12 flex flex-col max-w-[580px] w-full mx-auto lg:mx-0 justify-center"
-        />
+        <OnboardingFlow />
         <CreateSlideShow className="sticky top-0 hidden lg:block max-w-[500px] xl:max-w-[600px] 2xl:max-w-[680px] w-full h-full p-4" />
       </div>
     </div>
