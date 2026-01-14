@@ -3,9 +3,10 @@
 import FormInput from "@/components/shared/FormInput";
 import FormTextarea from "@/components/shared/FormTextarea";
 import ThemedButton from "@/components/shared/ThemedButton";
-import VoiceRecorder from "../shared/VoiceRecorder";
+import VoiceRecorder from "../../shared/VoiceRecorder";
 import { MessageSquareMore, Mic } from "lucide-react";
 import type { MemoryFormData, MemoryDescriptionType } from "@/types/onboarding";
+import { cn } from "@/lib/utils";
 
 type StepMemoryContentProps = {
   memoryForm?: MemoryFormData;
@@ -31,17 +32,18 @@ const StepMemoryContent = ({
   const isValid = !!memoryForm?.title?.trim();
 
   return (
-    <div className={className}>
-      <div className="mb-8">
+    <div className={cn("space-y-6", className)}>
+      <div className="space-y-1">
         <h1 className="text-2xl font-semibold text-off-black">
           Create your first content
         </h1>
-        <p className="text-gray-6 mt-2">
-          Personalize this portrait even more by adding notes or recordings. You can always do this or add many more updates later.
+        <p className="font-normal text-[18px] leading-[28px] text-[#8D8D8D]">
+          Personalize this portrait even more by adding notes or recordings. You
+          can always do this or add many more updates later.
         </p>
       </div>
 
-      <div className="mt-8 space-y-8">
+      <div className="space-y-3">
         <FormInput
           label="Content Title"
           placeholder="Enter Title e.g My life lessons"
@@ -75,7 +77,7 @@ const StepMemoryContent = ({
             onClick={() => onDescriptionTypeChange("note")}
             className={`${
               descriptionType === "recording" ? "" : "hidden"
-            } flex items-center gap-1 px-5 py-3 bg-white rounded-full shadow-md shadow-black/[.08] hover:bg-gray-50 transition-colors cursor-pointer`}
+            } flex items-center gap-1 px-5 py-3 bg-white rounded-full shadow-md shadow-black/8 hover:bg-gray-50 transition-colors cursor-pointer`}
           >
             <MessageSquareMore className="stroke-dominant-purple-main w-5 h-5" />
             <span className="text-dominant-purple-main text-sm font-normal leading-4 tracking-wide">
@@ -85,9 +87,10 @@ const StepMemoryContent = ({
           <button
             type="button"
             onClick={() => onDescriptionTypeChange("recording")}
-            className={`${
+            className={cn(
+              "flex items-center gap-1 px-5 py-3 bg-white rounded-full shadow-md shadow-black/8 hover:bg-gray-50 transition-colors cursor-pointer",
               descriptionType === "note" ? "" : "hidden"
-            } flex items-center gap-1 px-5 py-3 bg-white rounded-full shadow-md shadow-black/[.08] hover:bg-gray-50 transition-colors cursor-pointer`}
+            )}
           >
             <Mic className="stroke-dominant-purple-main w-5 h-5" />
             <span className="text-dominant-purple-main text-sm font-normal leading-4 tracking-wide">
@@ -107,7 +110,7 @@ const StepMemoryContent = ({
           <ThemedButton
             onClick={onNext}
             variant="black"
-            className="!py-3 w-fit md:!px-16"
+            className="py-3! w-fit md:px-16!"
             rounded="lg"
             disabled={!isValid}
             loading={isLoading}

@@ -1,7 +1,8 @@
 "use client";
 
 import ThemedButton from "@/components/shared/ThemedButton";
-import MediaUploader from "../shared/MediaUploader";
+import MediaUploader from "../../shared/MediaUploader";
+import { cn } from "@/lib/utils";
 
 type StepMemoryMediaProps = {
   memoryFiles?: File[];
@@ -26,18 +27,18 @@ const StepMemoryMedia = ({
   };
 
   return (
-    <div className={className}>
-      <div className="mb-8">
+    <div className={cn("space-y-6", className)}>
+      <div className="space-y-1">
         <h1 className="text-2xl font-semibold text-off-black">
           Add memories to portrait
         </h1>
-        <p className="text-gray-6 mt-2">
+        <p className="font-normal text-[18px] leading-[28px] text-[#8D8D8D]">
           Enrich this portrait with images, videos, and more. You can come back
           to add more later.
         </p>
       </div>
 
-      <div className="mt-8">
+      <div className="space-y-3">
         <MediaUploader
           files={memoryFiles}
           onFilesChange={onChange}
@@ -46,7 +47,7 @@ const StepMemoryMedia = ({
 
         <ThemedButton
           variant="black"
-          className="mt-8 w-full py-4"
+          className="mt-8 w-full py-4 disabled:hover:bg-off-black disabled:hover:text-white"
           rounded="lg"
           disabled={memoryFiles.length === 0}
           loading={isLoading}

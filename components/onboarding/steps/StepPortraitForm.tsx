@@ -6,6 +6,7 @@ import FormInput from "@/components/shared/FormInput";
 import FormSelect, { SelectOption } from "@/components/shared/FormSelect";
 import ThemedButton from "@/components/shared/ThemedButton";
 import type { CreatePortraitPayloadBase } from "@/types/portrait-types";
+import { cn } from "@/lib/utils";
 
 type StepPortraitFormProps = {
   formData?: CreatePortraitPayloadBase;
@@ -66,17 +67,17 @@ const StepPortraitForm = ({
   };
 
   return (
-    <div className={className}>
-      <div className="mb-8">
+    <div className={cn("space-y-6", className)}>
+      <div className="space-y-1">
         <h1 className="text-2xl font-semibold text-off-black">
           Create a new Portrait
         </h1>
-        <p className="text-gray-6 mt-2">
+        <p className="font-normal text-[18px] leading-[28px] text-[#8D8D8D]">
           Get started now by adding content to a portrait.
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         <FormInput
           label="Name of Portrait owner"
           placeholder="Portrait Name"
@@ -109,25 +110,25 @@ const StepPortraitForm = ({
             variant="white"
           />
         )}
+
+        <ThemedButton
+          variant="black"
+          className="mt-8 w-full py-4 disabled:hover:bg-off-black disabled:hover:text-white"
+          rounded="lg"
+          disabled={!isValid}
+          onClick={handleSubmit}
+        >
+          Continue
+        </ThemedButton>
+
+        <button
+          onClick={onSkip}
+          className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] mt-6 hover:underline w-full cursor-pointer"
+          type="button"
+        >
+          Skip for now
+        </button>
       </div>
-
-      <ThemedButton
-        variant="black"
-        className="mt-8 w-full py-4 disabled:hover:bg-off-black disabled:hover:text-white"
-        rounded="lg"
-        disabled={!isValid}
-        onClick={handleSubmit}
-      >
-        Continue
-      </ThemedButton>
-
-      <button
-        onClick={onSkip}
-        className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] mt-6 hover:underline w-full cursor-pointer"
-        type="button"
-      >
-        Skip for now
-      </button>
     </div>
   );
 };
