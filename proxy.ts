@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const USER_ID_COOKIE_KEY = "fb_user_id";
-
-const protectedRoutes = ["/home", "/onboarding"];
+const protectedRoutes = ["/dashboard", "/dashboard/*", "/onboarding"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
