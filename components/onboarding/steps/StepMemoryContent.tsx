@@ -3,6 +3,7 @@
 import FormInput from "@/components/shared/FormInput";
 import FormTextarea from "@/components/shared/FormTextarea";
 import ThemedButton from "@/components/shared/ThemedButton";
+import VoiceRecorder from "../shared/VoiceRecorder";
 import { MessageSquareMore, Mic } from "lucide-react";
 import type { MemoryFormData, MemoryDescriptionType } from "@/types/onboarding";
 
@@ -51,9 +52,13 @@ const StepMemoryContent = ({
 
         <div>
           {descriptionType === "recording" ? (
-            <div className="border-2 border-dashed border-gray-4 rounded-lg p-12 text-center">
-              <p className="text-gray-6">Voice Recorder Component - Coming Soon</p>
-            </div>
+            <VoiceRecorder
+              onRecordingComplete={(data) => {
+                if (data.file) {
+                  onChange({ recording: data.file });
+                }
+              }}
+            />
           ) : (
             <FormTextarea
               placeholder="Write anything here"

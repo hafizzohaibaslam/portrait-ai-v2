@@ -21,6 +21,7 @@ const STEPS: OnboardStep[] = [
   "memory_content",
 ];
 
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 export const useOnboardingFlow = () => {
   const router = useRouter();
   const [state, setState] = useState<OnboardState>({
@@ -69,7 +70,7 @@ export const useOnboardingFlow = () => {
     setState((prev) => ({ ...prev, profileImage: file }));
   }, []);
 
-  const updateMemoryFiles = useCallback((files: File | null) => {
+  const updateMemoryFiles = useCallback((files: File[]) => {
     setState((prev) => ({ ...prev, memoryFiles: files }));
   }, []);
 

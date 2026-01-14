@@ -1,6 +1,7 @@
 "use client";
-
 import ThemedButton from "@/components/shared/ThemedButton";
+import PictureDropzone from "../shared/PictureDropzone";
+import { MAX_FILE_SIZE } from "@/hooks/onboarding/useOnboardingFlow";
 
 type StepPortraitImageProps = {
   portraitImage?: File;
@@ -23,18 +24,17 @@ const StepPortraitImage = ({
         <h1 className="text-2xl font-semibold text-off-black">
           Upload portrait owner photo
         </h1>
-        <p className="text-gray-6 mt-2">
+        <p className="text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] mt-6 hover:underline w-full cursor-pointer mt-2">
           Add portrait owner photo to personalize this portrait.
         </p>
       </div>
 
       <div className="mt-8">
-        {/* TODO: Add PictureDropzone component */}
-        <div className="border-2 border-dashed border-gray-4 rounded-lg p-12 text-center">
-          <p className="text-gray-6">
-            Picture Dropzone Component - Coming Soon
-          </p>
-        </div>
+        <PictureDropzone
+          value={portraitImage}
+          onChange={onChange}
+          maxFileSize={MAX_FILE_SIZE}
+        />
 
         <ThemedButton
           variant="black"
@@ -48,7 +48,7 @@ const StepPortraitImage = ({
 
       <button
         onClick={onSkip}
-        className="block text-center text-gray-6 mt-6 hover:underline w-full"
+        className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] mt-6 hover:underline w-full cursor-pointer"
         type="button"
       >
         Skip for now

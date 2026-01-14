@@ -90,7 +90,7 @@ const OnboardingFlow = ({ className }: OnboardingFlowProps) => {
       case "memory_media":
         return (
           <StepMemoryMedia
-            memoryFiles={state.memoryFiles}
+            memoryFiles={state.memoryFiles || []}
             onChange={updateMemoryFiles}
             onNext={handleMemoryMediaNext}
             onSkip={goToNextStep}

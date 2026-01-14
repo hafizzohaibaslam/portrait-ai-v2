@@ -1,10 +1,11 @@
 "use client";
 
 import ThemedButton from "@/components/shared/ThemedButton";
+import MediaUploader from "../shared/MediaUploader";
 
 type StepMemoryMediaProps = {
-  memoryFiles?: File | null;
-  onChange: (files: File | null) => void;
+  memoryFiles?: File[];
+  onChange: (files: File[]) => void;
   onNext: () => void;
   onSkip: () => void;
   isLoading?: boolean;
@@ -12,13 +13,18 @@ type StepMemoryMediaProps = {
 };
 
 const StepMemoryMedia = ({
-  memoryFiles,
+  memoryFiles = [],
   onChange,
   onNext,
   onSkip,
   isLoading = false,
   className,
 }: StepMemoryMediaProps) => {
+  const handleRemove = (index: number) => {
+    const updatedFiles = memoryFiles.filter((_, i) => i !== index);
+    onChange(updatedFiles);
+  };
+
   return (
     <div className={className}>
       <div className="mb-8">
@@ -26,21 +32,23 @@ const StepMemoryMedia = ({
           Add memories to portrait
         </h1>
         <p className="text-gray-6 mt-2">
-          Enrich this portrait with images, videos, and more. You can come back to add more later.
+          Enrich this portrait with images, videos, and more. You can come back
+          to add more later.
         </p>
       </div>
 
       <div className="mt-8">
-        {/* TODO: Add MediaUploader component */}
-        <div className="border-2 border-dashed border-gray-4 rounded-lg p-12 text-center">
-          <p className="text-gray-6">Media Uploader Component - Coming Soon</p>
-        </div>
+        <MediaUploader
+          files={memoryFiles}
+          onFilesChange={onChange}
+          onRemove={handleRemove}
+        />
 
         <ThemedButton
           variant="black"
           className="mt-8 w-full py-4"
           rounded="lg"
-          disabled={!memoryFiles}
+          disabled={memoryFiles.length === 0}
           loading={isLoading}
           onClick={onNext}
         >
@@ -50,7 +58,7 @@ const StepMemoryMedia = ({
 
       <button
         onClick={onSkip}
-        className="block text-center text-gray-6 mt-6 hover:underline w-full"
+        className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] mt-6 hover:underline w-full cursor-pointer"
         type="button"
       >
         Skip for now

@@ -86,7 +86,7 @@ export type OnboardState = {
 
   // Memory-related states
   memoryId?: string;
-  memoryFiles?: File | null;
+  memoryFiles?: File[];
   memoryForm?: MemoryFormData;
   memoryDescriptionType?: MemoryDescriptionType;
   memoryValidated?: boolean;
