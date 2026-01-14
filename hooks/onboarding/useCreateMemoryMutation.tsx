@@ -13,28 +13,24 @@ export const useCreateMemoryMutation = () => {
     mutationFn: async (payload: CreateMemoryPayload) => {
       const formData = new FormData();
 
-      // Required fields
-      formData.append("portrait_id", payload.portrait_id);
-      formData.append("title", payload.title);
+      // Required field: type
+      formData.append("type", payload.type);
 
-      // Optional fields
-      if (payload.description) {
-        formData.append("description", payload.description);
-      }
-      if (payload.family_id) {
-        formData.append("family_id", payload.family_id);
-      }
-      if (payload.media_url) {
-        formData.append("media_url", payload.media_url);
-      }
-
-      // Add media file if provided
-      if (payload.media_file) {
-        formData.append("media_file", payload.media_file);
+      if (payload.type === "note") {
+        // For note type: title is required, description is optional
+        formData.append("content title", payload.title);
+        if (payload.description) {
+          formData.append("content description", payload.description);
+        }
+      } else if (payload.type === "file") {
+        // For file type: files array is required
+        payload.files.forEach((file) => {
+          formData.append("files[]", file);
+        });
       }
 
       const response = await API.post<CreateMemoryResponse>(
-        "/memories/create",
+        `/portraits/${payload.portrait_id}/memories`,
         formData,
         {
           headers: {
@@ -50,16 +46,19 @@ export const useCreateMemoryMutation = () => {
     },
     onError: (error: unknown) => {
       let errorMessage = "Failed to create memory. Please try again";
-      
+
       if (error && typeof error === "object" && "response" in error) {
-        const axiosError = error as { response?: { data?: { error?: string; message?: string } } };
-        errorMessage = axiosError.response?.data?.error || 
-                      axiosError.response?.data?.message || 
-                      errorMessage;
+        const axiosError = error as {
+          response?: { data?: { error?: string; message?: string } };
+        };
+        errorMessage =
+          axiosError.response?.data?.error ||
+          axiosError.response?.data?.message ||
+          errorMessage;
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-      
+
       toast.error(errorMessage);
     },
   });

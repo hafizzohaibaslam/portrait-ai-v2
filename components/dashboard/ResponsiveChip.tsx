@@ -30,7 +30,7 @@ const ResponsiveChip = ({
         "p-2 lg:px-6 lg:py-3",
         "rounded-full",
         "border-[1.5px] border-gray-4",
-        "bg-white hover:bg-off-black hover:text-white",
+        "bg-white",
         "transition-ease cursor-pointer",
         className
       )}

@@ -2,14 +2,35 @@
 
 import { useEffect, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
-import { Upload, Trash2 } from "lucide-react";
+import {
+  Upload,
+  Trash2,
+  Image as ImageIcon,
+  Video,
+  Music,
+  FileText,
+  // Users,
+} from "lucide-react";
 import DashedBorderWrapper from "@/components/shared/DashedBorderWrapper";
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+
+type MediaFileType = "image" | "video" | "audio" | "document";
 
 type MediaUploaderProps = {
   files: File[];
   onFilesChange: (files: File[]) => void;
   onRemove: (index: number) => void;
+  onShare?: () => void;
+  title?: string;
+  description?: string;
+  showShareButton?: boolean;
   className?: string;
 };
 
@@ -17,6 +38,10 @@ const MediaUploader = ({
   files,
   onFilesChange,
   onRemove,
+  // onShare,
+  title,
+  description,
+  showShareButton,
   className,
 }: MediaUploaderProps) => {
   const dropzone = useDropzone({
@@ -61,87 +86,207 @@ const MediaUploader = ({
     };
   }, [previewUrls]);
 
+  const getInputCardTypes = (): MediaFileType[] => [
+    "image",
+    "video",
+    "audio",
+    "document",
+  ];
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      onFilesChange([...files, ...Array.from(e.target.files)]);
+    }
+  };
+
+  const getFileTypeIcon = (type: MediaFileType) => {
+    switch (type) {
+      case "audio":
+        return <Music className="w-[20px] h-[20px]" />;
+      case "image":
+        return <ImageIcon className="w-[20px] h-[20px]" />;
+      case "video":
+        return <Video className="w-[20px] h-[20px]" />;
+      case "document":
+        return <FileText className="w-[20px] h-[20px]" />;
+    }
+  };
+
+  const getFileTypeLabel = (type: MediaFileType) => {
+    switch (type) {
+      case "audio":
+        return "Audio";
+      case "image":
+        return "Images";
+      case "video":
+        return "Videos";
+      case "document":
+        return "Documents";
+    }
+  };
+
+  const getFileTypeAccept = (type: MediaFileType) => {
+    switch (type) {
+      case "audio":
+        return "audio/*";
+      case "image":
+        return "image/*";
+      case "video":
+        return "video/*";
+      case "document":
+        return "*/*";
+    }
+  };
+
+  const hasHeader = title || description || showShareButton;
+
   return (
     <div className={cn("", className)}>
-      <div className={cn(hasFiles ? "lg:flex items-stretch" : "")}>
-        <DashedBorderWrapper
-          divProps={dropzone.getRootProps()}
-          className={cn(
-            hasFiles
-              ? "lg:max-w-[220px] max-h-[360px] lg:sticky top-0"
-              : "",
-            "flex flex-col items-center justify-center cursor-pointer"
+      {hasHeader && (
+        <div className="lg:flex items-start justify-between">
+          {(title || description) && (
+            <div className="max-w-[500px]">
+              {title && <div className="text-xl lg:text-[28px]">{title}</div>}
+              {description && (
+                <div className="font-light text-lg mt-4">{description}</div>
+              )}
+            </div>
           )}
-        >
-          <input {...dropzone.getInputProps()} />
-          <div
+          {/* {showShareButton && onShare && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    onClick={onShare}
+                    className="w-fit mt-4 lg:mt-0 cursor-pointer"
+                  >
+                    <div className="flex items-center bg-accent-purple-001 rounded-full px-4 py-3">
+                      <Users className="fill-off-black w-[24px] h-[24px] text-off-black" />
+                      <div className="pl-1">Share Portrait</div>
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  align="end"
+                  className="bg-white border border-accent-purple-001 text-off-black max-w-[200px] p-3 rounded-md"
+                >
+                  <span>
+                    Share this portrait with others so they can add their
+                    contributions.
+                  </span>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )} */}
+        </div>
+      )}
+      <div className={cn(hasHeader && "mt-12")}>
+        <div className={cn(hasFiles ? "lg:flex items-stretch" : "")}>
+          <DashedBorderWrapper
+            divProps={dropzone.getRootProps()}
             className={cn(
-              hasFiles ? "p-5" : "px-8 py-12",
-              "flex flex-col items-center justify-center text-center"
+              hasFiles ? "lg:max-w-[220px] max-h-[360px] lg:sticky top-0" : "",
+              "flex flex-col items-center justify-center cursor-pointer"
             )}
           >
+            <input {...dropzone.getInputProps()} />
             <div
               className={cn(
-                "bg-accent-purple-001 rounded-full w-fit h-fit",
-                hasFiles ? "p-3 md:p-4" : "p-3 md:p-5"
+                hasFiles ? "p-5" : "px-8 py-12",
+                "flex flex-col items-center justify-center text-center"
               )}
             >
-              <Upload
+              <div
                 className={cn(
-                  "stroke-dominant-purple-main",
-                  hasFiles ? "w-[20px] h-[20px]" : "w-[24px] h-[24px]"
+                  "bg-accent-purple-001 rounded-full p-3 w-fit h-fit",
+                  hasFiles ? "md:p-4" : "md:p-5"
                 )}
-              />
+              >
+                <Upload
+                  className={cn(
+                    "stroke-dominant-purple-main",
+                    hasFiles ? "w-[20px] h-[20px]" : "w-[24px] h-[24px]"
+                  )}
+                />
+              </div>
+              <div className={hasFiles ? "mt-2" : "mt-8"}>
+                Drag & drop or Choose a file to upload
+              </div>
+              {!hasFiles && (
+                <div className="mt-8 text-black-003 max-w-[500px] mx-auto">
+                  Supported file types: Images (e.g. PNG & JPEG), Videos (e.g
+                  MOV & MP4), Audio (e.g. MP3) and Documents (e.g. PDF & DOCX)
+                </div>
+              )}
             </div>
-            <div className={hasFiles ? "mt-2" : "mt-8"}>
-              Drag & drop or Choose a file to upload
-            </div>
-            {!hasFiles && (
-              <div className="mt-8 text-black-003 max-w-[500px] mx-auto">
-                Supported file types: Images (e.g. PNG & JPEG), Videos (e.g MOV
-                & MP4), Audio (e.g. MP3) and Documents (e.g. PDF & DOCX)
+          </DashedBorderWrapper>
+          <>
+            {hasFiles ? (
+              <div className="mt-8 lg:mt-0 pl-4 flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {files.map((file, index) => {
+                  const previewUrl = previewUrls[index];
+                  return (
+                    <div
+                      key={`${file.name}-${index}`}
+                      className="relative border border-gray-4 rounded-lg overflow-hidden group aspect-square"
+                    >
+                      {previewUrl ? (
+                        <Image
+                          src={previewUrl}
+                          alt={file.name}
+                          fill
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="p-8 text-center text-gray-6 h-full flex items-center justify-center">
+                          <div>
+                            <div className="text-sm font-medium">
+                              {file.name}
+                            </div>
+                            <div className="text-xs text-gray-6 mt-1">
+                              {(file.size / 1024 / 1024).toFixed(2)} MB
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => onRemove(index)}
+                        className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                        type="button"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+                {getInputCardTypes().map((cardType, i) => (
+                  <label
+                    key={i}
+                    className="py-2 lg:p-8 cursor-pointer border border-gray-9 rounded-2xl flex flex-col items-center justify-center"
+                  >
+                    <div className="lg:mt-4 rounded-xl bg-accent-purple-001 p-4 w-fit h-fit box-content stroke-dominant-purple-main">
+                      {getFileTypeIcon(cardType)}
+                    </div>
+                    <div className="lg:mt-4 text-black-005">
+                      {getFileTypeLabel(cardType)}
+                    </div>
+                    <input
+                      className="hidden"
+                      type="file"
+                      multiple
+                      accept={getFileTypeAccept(cardType)}
+                      onChange={handleInputChange}
+                    />
+                  </label>
+                ))}
               </div>
             )}
-          </div>
-        </DashedBorderWrapper>
-
-        {hasFiles && (
-          <div className="mt-8 lg:mt-0 pl-4 flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {files.map((file, index) => {
-              const previewUrl = previewUrls[index];
-              return (
-                <div
-                  key={`${file.name}-${index}`}
-                  className="relative border border-gray-4 rounded-lg overflow-hidden group aspect-square"
-                >
-                  {previewUrl ? (
-                    <img
-                      src={previewUrl}
-                      alt={file.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="p-8 text-center text-gray-6 h-full flex items-center justify-center">
-                      <div>
-                        <div className="text-sm font-medium">{file.name}</div>
-                        <div className="text-xs text-gray-6 mt-1">
-                          {(file.size / 1024 / 1024).toFixed(2)} MB
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <button
-                    onClick={() => onRemove(index)}
-                    className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                    type="button"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        )}
+          </>
+        </div>
       </div>
     </div>
   );

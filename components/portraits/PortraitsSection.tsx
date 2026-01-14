@@ -15,7 +15,7 @@ type PortraitsSectionProps = {
 };
 
 const PortraitsSection = ({ className }: PortraitsSectionProps) => {
-  const { data: portraits, isLoading, error } = usePortraitsQuery();
+  const { data: portraits, isLoading } = usePortraitsQuery();
 
   return (
     <section className={cn("", className)}>
@@ -28,11 +28,12 @@ const PortraitsSection = ({ className }: PortraitsSectionProps) => {
             <PortraitCardSkeleton />
             <PortraitCardSkeleton />
           </>
-        ) : error ? (
-          <div className="col-span-full text-center text-red-500 py-8">
-            Failed to load portraits. Please try again.
-          </div>
-        ) : portraits && portraits.length > 0 ? (
+        ) : // : error ? (
+        //   <div className="col-span-full text-center text-red-500 py-8">
+        //     Failed to load portraits. Please try again.
+        //   </div>
+        // )
+        portraits && portraits.length > 0 ? (
           portraits.map((portrait) => (
             <Link
               key={portrait.portrait_id}

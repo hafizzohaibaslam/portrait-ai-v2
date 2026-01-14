@@ -10,18 +10,45 @@ export type Memory = {
   media_url: string | null;
 };
 
-// Payload for creating a memory
-export type CreateMemoryPayload = {
-  portrait_id: string; // Required: ID of the portrait this memory is about
-  title: string; // Required: Title of the memory
-  description?: string | null; // Optional: Detailed description
-  family_id?: string | null; // Optional: Auto-retrieved from portrait if not provided
-  media_file?: File | null; // Optional: Media file to upload (image/video)
-  media_url?: string | null; // Optional: Existing media URL (if not uploading file)
+// Payload for creating a memory (new API)
+export type CreateMemoryPayload =
+  | {
+      portrait_id: string;
+      type: "note";
+      title: string; // Required if type=note
+      description?: string; // Optional
+    }
+  | {
+      portrait_id: string;
+      type: "file";
+      files: File[]; // Required if type=file, one or more files
+    };
+
+// File information in memory response
+export type MemoryFile = {
+  id: string;
+  name: string;
+  mime_type: string;
+  size_bytes: number;
+  url: string;
 };
 
-// Response when creating a memory
-export type CreateMemoryResponse = {
-  message: string;
-  memory: Memory;
+// Single memory response
+export type MemoryResponse = {
+  id: string;
+  portrait_id: string;
+  type: "note" | "file";
+  title?: string;
+  description?: string;
+  file?: MemoryFile;
+  created_at: string;
 };
+
+// Response when creating a memory (new API)
+export type CreateMemoryResponse =
+  | MemoryResponse // For type=note
+  | {
+      portrait_id: string;
+      type: "file";
+      memories: MemoryResponse[];
+    }; // For type=file (bulk)

@@ -1,203 +1,54 @@
 "use client";
 
-import { useState } from "react";
-import { RelationType } from "@/types/global-types";
 import {
   DialogContent,
-  DialogHeader,
   DialogTitle,
-  DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
-import FormInput from "@/components/shared/FormInput";
-import FormSelect, { SelectOption } from "@/components/shared/FormSelect";
-import FormTextarea from "@/components/shared/FormTextarea";
-import PictureDropzone from "@/components/shared/PictureDropzone";
-import ThemedButton from "@/components/shared/ThemedButton";
-import { useCreatePortraitFromDashboardMutation } from "@/hooks/portraits/useCreatePortraitFromDashboardMutation";
-import { MAX_FILE_SIZE } from "@/hooks/onboarding/useOnboardingFlow";
-import type { CreatePortraitAfterOnboardingPayload } from "@/types/portrait-types";
-
-const RELATION_TYPE_OPTIONS: SelectOption[] = [
-  { value: "mother", label: "Mother" },
-  { value: "father", label: "Father" },
-  { value: "grandmother", label: "Grandmother" },
-  { value: "grandfather", label: "Grandfather" },
-  { value: "sister", label: "Sister" },
-  { value: "brother", label: "Brother" },
-  { value: "aunt", label: "Aunt" },
-  { value: "uncle", label: "Uncle" },
-  { value: "cousin", label: "Cousin" },
-  { value: "spouse", label: "Spouse" },
-  { value: "child", label: "Child" },
-  { value: "friend", label: "Friend" },
-  { value: "family_member", label: "Family member" },
-  { value: "other", label: "Other" },
-];
-
-const IS_LIVING_OPTIONS: SelectOption[] = [
-  { value: "true", label: "Yes" },
-  { value: "false", label: "No" },
-];
+import DialogHeader from "@/components/dashboard/DialogHeader";
+import { useCreatePortraitFlow } from "@/hooks/portraits/useCreatePortraitFlow";
+import CreatePortraitStepRenderer from "./create-portrait-steps/CreatePortraitStepRenderer";
+import { cn } from "@/lib/utils";
 
 type CreatePortraitDialogProps = {
   onClose?: () => void;
 };
 
 const CreatePortraitDialog = ({ onClose }: CreatePortraitDialogProps = {}) => {
-  const [name, setName] = useState("");
-  const [relationType, setRelationType] = useState<RelationType | "">("");
-  const [isLiving, setIsLiving] = useState<string>("");
-  const [description, setDescription] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [dateOfDeath, setDateOfDeath] = useState("");
-  const [subjectEmail, setSubjectEmail] = useState("");
-  const [profileImage, setProfileImage] = useState<File | undefined>();
+  const { state, ...handlers } = useCreatePortraitFlow();
 
-  const isRelative = relationType && relationType !== "your-own";
-  const isDeceased = isLiving === "false";
-
-  const isValid =
-    name.trim().length > 0 &&
-    !!relationType &&
-    (relationType === "your-own" || isLiving !== "");
-
-  const mutation = useCreatePortraitFromDashboardMutation();
-
-  const handleSubmit = async () => {
-    if (!isValid || !relationType) return;
-
-    const payload: CreatePortraitAfterOnboardingPayload = {
-      name: name.trim(),
-      relation_type: relationType as RelationType,
-      is_deceased: isRelative ? isDeceased : false,
-      description: description.trim() || null,
-      date_of_birth: dateOfBirth || null,
-      date_of_death: dateOfDeath || null,
-      subject_email: subjectEmail.trim() || null,
-      profile_image: profileImage || null,
-    };
-
-    try {
-      await mutation.mutateAsync(payload);
-      // Reset form
-      setName("");
-      setRelationType("");
-      setIsLiving("");
-      setDescription("");
-      setDateOfBirth("");
-      setDateOfDeath("");
-      setSubjectEmail("");
-      setProfileImage(undefined);
-      onClose?.();
-    } catch (error) {
-      // Error is handled by mutation
-    }
+  const handleClose = () => {
+    handlers.reset();
+    onClose?.();
   };
 
   return (
-    <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-      <DialogHeader>
-        <DialogTitle>Create a new Portrait</DialogTitle>
-      </DialogHeader>
+    <DialogContent
+      showCloseButton={false}
+      className={cn(
+        "bottom-4 top-[unset] translate-y-0",
+        "md:bottom-[unset] md:top-[50%] md:translate-y-[-50%]",
+        "block p-8 pt-0 outline-0",
+        "rounded-xl md:rounded-2xl",
+        "overflow-y-auto",
+        "w-full max-w-[950px]!",
+        "h-auto max-h-[90vh] md:max-h-[92vh]",
+        "border-none"
+      )}
+    >
+      <DialogTitle className="sr-only">Create a new Portrait</DialogTitle>
+      <DialogDescription className="sr-only">
+        Create a new portrait by following the steps below.
+      </DialogDescription>
+      <DialogHeader onClose={handleClose} />
 
-      <div className="space-y-4">
-        <FormInput
-          label="Name of Portrait owner"
-          placeholder="Portrait Name"
-          value={name}
-          onChange={setName}
-          variant="white"
+      <div>
+        <CreatePortraitStepRenderer
+          state={state}
+          handlers={handlers}
+          onClose={handleClose}
         />
-
-        <FormSelect
-          label="Whose Portrait are you crafting or contributing towards?"
-          placeholder="Select option"
-          options={RELATION_TYPE_OPTIONS}
-          value={relationType}
-          onChange={(value) => {
-            setRelationType(value as RelationType);
-            if (value === "your-own") {
-              setIsLiving("");
-            }
-          }}
-          variant="white"
-        />
-
-        {isRelative && (
-          <FormSelect
-            label="Is this person currently living?"
-            placeholder="Select option"
-            options={IS_LIVING_OPTIONS}
-            value={isLiving}
-            onChange={setIsLiving}
-            variant="white"
-          />
-        )}
-
-        {isDeceased && (
-          <FormInput
-            label="Date of Death"
-            type="text"
-            placeholder="YYYY-MM-DD"
-            value={dateOfDeath}
-            onChange={setDateOfDeath}
-            variant="white"
-          />
-        )}
-
-        <FormInput
-          label="Date of Birth (Optional)"
-          type="text"
-          placeholder="YYYY-MM-DD"
-          value={dateOfBirth}
-          onChange={setDateOfBirth}
-          variant="white"
-        />
-
-        <FormTextarea
-          label="Description (Optional)"
-          placeholder="Add a description..."
-          value={description}
-          onChange={setDescription}
-          variant="white"
-        />
-
-        <FormInput
-          label="Subject Email (Optional)"
-          type="email"
-          placeholder="email@example.com"
-          value={subjectEmail}
-          onChange={setSubjectEmail}
-          variant="white"
-        />
-
-        <div>
-          <div className="mb-2">Portrait Image (Optional)</div>
-          <PictureDropzone
-            value={profileImage}
-            onChange={setProfileImage}
-            maxFileSize={MAX_FILE_SIZE}
-          />
-        </div>
       </div>
-
-      <DialogFooter>
-        <ThemedButton
-          variant="white"
-          onClick={onClose}
-          disabled={mutation.isPending}
-        >
-          Cancel
-        </ThemedButton>
-        <ThemedButton
-          variant="black"
-          onClick={handleSubmit}
-          disabled={!isValid || mutation.isPending}
-          loading={mutation.isPending}
-        >
-          Create Portrait
-        </ThemedButton>
-      </DialogFooter>
     </DialogContent>
   );
 };
