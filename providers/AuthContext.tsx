@@ -66,6 +66,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const handleSignOut = async () => {
     await signOut(auth);
     setUser(null);
+    localStorage.removeItem("newUser");
     Cookie.remove("fb_user_id");
     router.push("/auth/sign-in");
   };
