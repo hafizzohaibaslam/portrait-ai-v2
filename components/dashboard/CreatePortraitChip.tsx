@@ -3,14 +3,17 @@ import { Plus } from "lucide-react";
 import ResponsiveChip from "./ResponsiveChip";
 import CreatePortraitDialog from "@/components/portraits/CreatePortraitDialog";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
 
 type CreatePortraitChipProps = {
   className?: string;
 };
 
 const CreatePortraitChip = ({ className }: CreatePortraitChipProps) => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div>
           <ResponsiveChip
@@ -21,7 +24,7 @@ const CreatePortraitChip = ({ className }: CreatePortraitChipProps) => {
           />
         </div>
       </DialogTrigger>
-      <CreatePortraitDialog />
+      <CreatePortraitDialog onClose={() => setOpen(false)} />
     </Dialog>
   );
 };

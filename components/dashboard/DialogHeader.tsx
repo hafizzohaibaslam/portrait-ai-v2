@@ -19,7 +19,7 @@ const DialogHeader = ({ onClose, className }: DialogHeaderProps) => {
       <AppBrand href="/dashboard" />
       <button
         onClick={onClose}
-        className="cursor-pointer bg-gray-6 rounded-full p-3"
+        className="cursor-pointer bg-gray-6 rounded-full p-3 hover:bg-gray-4 transition-colors"
         aria-label="Close dialog"
       >
         <X className="stroke-[1px] stroke-off-black w-5 h-5" />

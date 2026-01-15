@@ -229,7 +229,7 @@ const MediaUploader = ({
                   return (
                     <div
                       key={`${file.name}-${index}`}
-                      className="relative border border-gray-4 rounded-lg overflow-hidden group aspect-square"
+                      className="relative border border-gray-4 bg-[#EFE1EF] rounded-lg overflow-hidden group aspect-square"
                     >
                       {previewUrl ? (
                         <Image
@@ -239,12 +239,12 @@ const MediaUploader = ({
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="p-8 text-center text-gray-6 h-full flex items-center justify-center">
+                        <div className="p-8 text-center text-[#6A6A6A] h-full flex items-center justify-center">
                           <div>
-                            <div className="text-sm font-medium">
+                            <div className="text-sm font-medium text-[#1F1F1F]">
                               {file.name}
                             </div>
-                            <div className="text-xs text-gray-6 mt-1">
+                            <div className="text-xs text-[#6A6A6A] mt-1">
                               {(file.size / 1024 / 1024).toFixed(2)} MB
                             </div>
                           </div>

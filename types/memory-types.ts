@@ -14,14 +14,21 @@ export type Memory = {
 export type CreateMemoryPayload =
   | {
       portrait_id: string;
-      type: "note";
-      title: string; // Required if type=note
-      description?: string; // Optional
+      type: "content";
+      body: string; // Text content for typed text
+      files?: never; // Ensure files is not present
     }
   | {
       portrait_id: string;
       type: "file";
       files: File[]; // Required if type=file, one or more files
+      body?: never; // Ensure body is not present
+    }
+  | {
+      portrait_id: string;
+      type: "content";
+      files: File[]; // Single audio file for recorded audio (type="content" with file)
+      body?: never; // Ensure body is not present
     };
 
 // File information in memory response

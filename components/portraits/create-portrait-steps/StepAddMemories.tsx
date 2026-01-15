@@ -55,17 +55,20 @@ const StepAddMemories = ({
           files,
         });
       } else {
-        // Create content type (note)
-        if (!title.trim()) {
-          // Title is required for note type
+        // Create content type - combine title and description into body
+        const bodyContent = title.trim()
+          ? `${title.trim()}${description.trim() ? `\n\n${description.trim()}` : ""}`
+          : description.trim();
+
+        if (!bodyContent) {
+          // Body is required for content type
           return;
         }
 
         await createMemoryMutation.mutateAsync({
           portrait_id: portrait.portrait_id,
-          type: "note",
-          title: title.trim(),
-          description: description.trim() || undefined,
+          type: "content",
+          body: bodyContent,
         });
       }
 
@@ -84,7 +87,9 @@ const StepAddMemories = ({
   };
 
   const isValid =
-    activeTab === "upload" ? files.length > 0 : title.trim().length > 0;
+    activeTab === "upload"
+      ? files.length > 0
+      : title.trim().length > 0 || description.trim().length > 0;
 
   const submitButtonText =
     activeTab === "upload" ? "Create Portrait" : "Upload Content";

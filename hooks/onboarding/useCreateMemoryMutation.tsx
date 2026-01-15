@@ -11,35 +11,57 @@ import type {
 export const useCreateMemoryMutation = () => {
   return useMutation({
     mutationFn: async (payload: CreateMemoryPayload) => {
-      const formData = new FormData();
+      // portrait_id is passed as query parameter
+      const url = `/api/memories/create?portrait_id=${payload.portrait_id}`;
 
-      // Required field: type
-      formData.append("type", payload.type);
+      if (payload.type === "content") {
+        if ("body" in payload && payload.body) {
+          // Typed text content - use JSON
+          const response = await API.post<CreateMemoryResponse>(
+            url,
+            {
+              type: "content",
+              body: payload.body,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          return response.data;
+        } else if ("files" in payload && payload.files) {
+          // Recorded audio - use multipart/form-data with type="content"
+          const formData = new FormData();
+          formData.append("type", "content");
+          if (payload.files.length > 0) {
+            formData.append("files[0]", payload.files[0]);
+          }
 
-      if (payload.type === "note") {
-        // For note type: title is required, description is optional
-        formData.append("content title", payload.title);
-        if (payload.description) {
-          formData.append("content description", payload.description);
+          const response = await API.post<CreateMemoryResponse>(url, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          return response.data;
         }
       } else if (payload.type === "file") {
-        // For file type: files array is required
-        payload.files.forEach((file) => {
-          formData.append("files[]", file);
+        // File upload - use multipart/form-data
+        const formData = new FormData();
+        formData.append("type", "file");
+        payload.files.forEach((file, index) => {
+          formData.append(`files[${index}]`, file);
         });
-      }
 
-      const response = await API.post<CreateMemoryResponse>(
-        `/portraits/${payload.portrait_id}/memories`,
-        formData,
-        {
+        const response = await API.post<CreateMemoryResponse>(url, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
-      );
+        });
+        return response.data;
+      }
 
-      return response.data;
+      throw new Error("Invalid payload type");
     },
     onSuccess: () => {
       // Toast is handled in OnboardingFlow after state update
