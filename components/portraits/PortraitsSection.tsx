@@ -1,7 +1,6 @@
 "use client";
-
 import Link from "next/link";
-import { usePortraitsQuery } from "@/hooks/portraits/usePortraitsQuery";
+import { useGetAllRelatedPortraits } from "@/hooks/portraits/useGetAllRelatedPortraits";
 import PortraitSectionHeader from "@/components/portraits/PortraitSectionHeader";
 import PortraitGrid from "@/components/portraits/PortraitGrid";
 import PortraitCard from "@/components/portraits/PortraitCard";
@@ -15,7 +14,7 @@ type PortraitsSectionProps = {
 };
 
 const PortraitsSection = ({ className }: PortraitsSectionProps) => {
-  const { data: portraits, isLoading } = usePortraitsQuery();
+  const { data: portraits, isLoading } = useGetAllRelatedPortraits();
 
   return (
     <section className={cn("", className)}>

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import MediaUploader from "@/components/shared/MediaUploader";
 import FormInput from "@/components/shared/FormInput";
@@ -10,11 +9,12 @@ import { useCreateMemoryMutation } from "@/hooks/onboarding/useCreateMemoryMutat
 import type { Portrait } from "@/types/portrait-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { Mic } from "lucide-react";
+import { toast } from "sonner";
 
 type StepAddMemoriesProps = {
   portrait: Portrait;
-  onNext: () => void;
-  onShare: () => void;
+  onNext?: () => void;
+  onShare?: () => void;
 };
 
 const StepAddMemories = ({
@@ -45,19 +45,28 @@ const StepAddMemories = ({
         // Upload files type
         if (files.length === 0) {
           // No files, just close
-          onNext();
+          onNext?.();
           return;
         }
 
-        await createMemoryMutation.mutateAsync({
-          portrait_id: portrait.portrait_id,
-          type: "file",
-          files,
-        });
+        await createMemoryMutation.mutateAsync(
+          {
+            portrait_id: portrait.portrait_id,
+            type: "file",
+            files,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Memory created successfully");
+            },
+          }
+        );
       } else {
         // Create content type - combine title and description into body
         const bodyContent = title.trim()
-          ? `${title.trim()}${description.trim() ? `\n\n${description.trim()}` : ""}`
+          ? `${title.trim()}${
+              description.trim() ? `\n\n${description.trim()}` : ""
+            }`
           : description.trim();
 
         if (!bodyContent) {
@@ -75,12 +84,13 @@ const StepAddMemories = ({
       // Invalidate queries to refetch data
       queryClient.invalidateQueries({ queryKey: ["memories"] });
       queryClient.invalidateQueries({ queryKey: ["portraits", "related"] });
+      queryClient.invalidateQueries({ queryKey: ["portrait"] });
 
       // Reset form
       setFiles([]);
       setTitle("");
       setDescription("");
-      onNext();
+      onNext?.();
     } catch {
       // Error is handled by mutation
     }

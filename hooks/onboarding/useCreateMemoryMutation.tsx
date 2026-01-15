@@ -12,7 +12,7 @@ export const useCreateMemoryMutation = () => {
   return useMutation({
     mutationFn: async (payload: CreateMemoryPayload) => {
       // portrait_id is passed as query parameter
-      const url = `/api/memories/create?portrait_id=${payload.portrait_id}`;
+      const url = `/memories/create?portrait_id=${payload.portrait_id}`;
 
       if (payload.type === "content") {
         if ("body" in payload && payload.body) {

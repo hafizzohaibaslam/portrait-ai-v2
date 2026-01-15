@@ -10,13 +10,12 @@ type PortraitsResponse = {
   count?: number;
 };
 
-export const usePortraitsQuery = () => {
+export const useGetAllRelatedPortraits = () => {
   const { user } = useAuthContext();
 
   return useQuery({
     queryKey: ["portraits", "related"],
     queryFn: async () => {
-      if (!user) throw new Error("Not authenticated");
       const response = await API.get<PortraitsResponse>(
         "/portraits/my-related"
       );
