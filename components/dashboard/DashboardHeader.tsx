@@ -6,7 +6,7 @@ import AppBrand from "@/components/shared/AppBrand";
 import SearchChip from "./SearchChip";
 import NotificationChip from "./NotificationChip";
 import HelpChip from "./HelpChip";
-import UserThumbDropdown from "./UserThumbDropdown";
+import UserMenu from "./user-menu/UserMenu";
 import SearchModal from "./SearchModal";
 
 type DashboardHeaderProps = {
@@ -32,7 +32,7 @@ const DashboardHeader = ({ className }: DashboardHeaderProps) => {
           <SearchChip onClick={() => setIsSearchOpen(true)} />
           <NotificationChip />
           <HelpChip />
-          <UserThumbDropdown />
+          <UserMenu />
         </div>
       </header>
       <SearchModal open={isSearchOpen} onOpenChange={setIsSearchOpen} />

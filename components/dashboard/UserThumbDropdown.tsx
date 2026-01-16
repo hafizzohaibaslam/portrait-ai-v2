@@ -48,19 +48,19 @@ const UserThumbDropdown = ({ className }: UserThumbDropdownProps) => {
           )}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className={cn("w-56", className)}>
+      <DropdownMenuContent align="end" className={cn("w-[356px]", className)}>
         <div className="px-2 py-1.5">
           <p className="text-sm font-medium">{user?.name || "User"}</p>
           <p className="text-xs text-gray-6">{user?.email}</p>
         </div>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-gray-1 h-px" />
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings" className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
             Settings
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-gray-1 h-px" />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
           Sign Out
