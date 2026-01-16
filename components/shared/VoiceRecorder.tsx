@@ -11,7 +11,10 @@ type VoiceRecorderProps = {
   className?: string;
 };
 
-const VoiceRecorder = ({ onRecordingComplete, className }: VoiceRecorderProps) => {
+const VoiceRecorder = ({
+  onRecordingComplete,
+  className,
+}: VoiceRecorderProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const recorder = useReactMediaRecorder({
     audio: true,
@@ -152,18 +155,13 @@ const VoiceRecorder = ({ onRecordingComplete, className }: VoiceRecorderProps) =
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div
-      className={cn(
-        "border-[1px] border-gray-3 rounded-xl p-8",
-        className
-      )}
-    >
+    <div className={cn("border border-gray-3 rounded-xl p-8", className)}>
       <div className="max-w-[400px] mx-auto">
         <div className="flex items-center justify-between">
           {/* Left Button */}
           <button
             onClick={handleLeftButtonClick}
-            className="cursor-pointer w-fit h-fit rounded-full p-3 border-[1px] border-dominant-purple-main fill-dominant-purple-main"
+            className="cursor-pointer w-fit h-fit rounded-full p-3 border border-dominant-purple-main fill-dominant-purple-main"
           >
             {recorder.status === "stopped" ? (
               <Rewind className="w-3 h-3 fill-dominant-purple-main" />
@@ -177,11 +175,11 @@ const VoiceRecorder = ({ onRecordingComplete, className }: VoiceRecorderProps) =
           {/* Middle Button */}
           <button
             onClick={handleMiddleButtonClick}
-            className="group/VoiceRecorderMic relative cursor-pointer bg-accent-purple-001/[.04] w-fit h-fit p-8 box-content rounded-full"
+            className="group/VoiceRecorderMic relative cursor-pointer bg-accent-purple-001/40 w-fit h-fit p-8 box-content rounded-full"
           >
             <div
               className={cn(
-                "absolute inset-0 rounded-full w-[80%] h-[80%] box-content bg-accent-purple-001/[.5] m-auto",
+                "absolute inset-0 rounded-full w-[80%] h-[80%] box-content bg-accent-purple-001/50 m-auto",
                 recorder.status === "recording" && "animate-pulse",
                 recorder.status !== "recording" &&
                   "group-hover/VoiceRecorderMic:p-1 duration-300 ease-[cubic-bezier(0.4,0,0.6,1)]"
@@ -211,7 +209,7 @@ const VoiceRecorder = ({ onRecordingComplete, className }: VoiceRecorderProps) =
           {/* Right Button */}
           <button
             onClick={handleRightButtonClick}
-            className="cursor-pointer w-fit h-fit rounded-full p-3 border-[1px] border-dominant-purple-main fill-dominant-purple-main"
+            className="cursor-pointer w-fit h-fit rounded-full p-3 border border-dominant-purple-main fill-dominant-purple-main"
           >
             {recorder.status === "stopped" ? (
               <FastForward className="w-3 h-3 fill-dominant-purple-main" />
@@ -231,18 +229,18 @@ const VoiceRecorder = ({ onRecordingComplete, className }: VoiceRecorderProps) =
               <div className="absolute left-0 top-[3.18px] w-full h-[5.45px] bg-[#E8E8EA] rounded-[50px]" />
               {/* Filled Track */}
               <div
-                className="absolute left-0 top-[3.18px] h-[5.45px] bg-[#673147] rounded-[50px]"
+                className="absolute left-0 top-[3.18px] h-[5.45px] bg-dominant-purple-main rounded-[50px]"
                 style={{ width: `${progressPercentage}%` }}
               />
               {/* Knob */}
               <div
-                className="absolute top-0 h-[11.81px] w-[11.81px] bg-[#673147] border border-[#805366] rounded-full transform -translate-x-1/2"
+                className="absolute top-0 h-[11.81px] w-[11.81px] bg-dominant-purple-main border border-dominant-purple-main rounded-full transform -translate-x-1/2"
                 style={{ left: `${progressPercentage}%` }}
               />
             </div>
           </div>
         ) : recorder.status === "recording" || recorder.status === "paused" ? (
-          <div className="mt-12 text-center text-gray-6">
+          <div className="mt-12 text-center text-off-gray">
             Recording... {formatTime(elapsedTime)}
             <br />
             Click ⏹️ to stop or ⏸️ to pause

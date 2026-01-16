@@ -5,11 +5,14 @@ import FormInput from "@/components/shared/FormInput";
 import FormTextarea from "@/components/shared/FormTextarea";
 import ThemedButton from "@/components/shared/ThemedButton";
 import MemoryCreationTabs from "@/components/shared/MemoryCreationTabs";
+import VoiceRecorder from "@/components/shared/VoiceRecorder";
 import { useCreateMemoryMutation } from "@/hooks/onboarding/useCreateMemoryMutation";
 import type { Portrait } from "@/types/portrait-types";
+import type { MemoryDescriptionType } from "@/types/onboarding";
 import { useQueryClient } from "@tanstack/react-query";
-import { Mic } from "lucide-react";
+import { MessageSquareMore, Mic } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 type StepAddMemoriesProps = {
   portrait: Portrait;
@@ -26,6 +29,9 @@ const StepAddMemories = ({
   const [files, setFiles] = useState<File[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [descriptionType, setDescriptionType] =
+    useState<MemoryDescriptionType>("note");
+  const [recording, setRecording] = useState<File | null>(null);
   const createMemoryMutation = useCreateMemoryMutation();
   const queryClient = useQueryClient();
 
@@ -62,23 +68,33 @@ const StepAddMemories = ({
           }
         );
       } else {
-        // Create content type - combine title and description into body
-        const bodyContent = title.trim()
-          ? `${title.trim()}${
-              description.trim() ? `\n\n${description.trim()}` : ""
-            }`
-          : description.trim();
+        // Create content type
+        if (descriptionType === "recording" && recording) {
+          // Recorded audio - use multipart/form-data with type="content"
+          await createMemoryMutation.mutateAsync({
+            portrait_id: portrait.portrait_id,
+            type: "content",
+            files: [recording],
+          });
+        } else {
+          // Typed text content - combine title and description into body
+          const bodyContent = title.trim()
+            ? `${title.trim()}${
+                description.trim() ? `\n\n${description.trim()}` : ""
+              }`
+            : description.trim();
 
-        if (!bodyContent) {
-          // Body is required for content type
-          return;
+          if (!bodyContent) {
+            // Body is required for content type when not using recording
+            return;
+          }
+
+          await createMemoryMutation.mutateAsync({
+            portrait_id: portrait.portrait_id,
+            type: "content",
+            body: bodyContent,
+          });
         }
-
-        await createMemoryMutation.mutateAsync({
-          portrait_id: portrait.portrait_id,
-          type: "content",
-          body: bodyContent,
-        });
       }
 
       // Invalidate queries to refetch data
@@ -90,6 +106,8 @@ const StepAddMemories = ({
       setFiles([]);
       setTitle("");
       setDescription("");
+      setDescriptionType("note");
+      setRecording(null);
       onNext?.();
     } catch {
       // Error is handled by mutation
@@ -99,6 +117,8 @@ const StepAddMemories = ({
   const isValid =
     activeTab === "upload"
       ? files.length > 0
+      : descriptionType === "recording"
+      ? title.trim().length > 0 && recording !== null
       : title.trim().length > 0 || description.trim().length > 0;
 
   const submitButtonText =
@@ -139,21 +159,52 @@ const StepAddMemories = ({
               onChange={setTitle}
               variant="white"
             />
-            <div className="relative">
-              <FormTextarea
-                label=""
-                placeholder="Write anything here"
-                value={description}
-                onChange={setDescription}
-                variant="white"
-                className="min-h-[200px]"
-              />
+            <div className="h-fit">
+              {descriptionType === "recording" ? (
+                <VoiceRecorder
+                  onRecordingComplete={(data) => {
+                    if (data.file) {
+                      setRecording(data.file);
+                    }
+                  }}
+                />
+              ) : (
+                <FormTextarea
+                  label=""
+                  placeholder="Write anything here"
+                  value={description}
+                  onChange={setDescription}
+                  variant="white"
+                  className="min-h-[100px]"
+                />
+              )}
+            </div>
+            <div className="flex justify-end">
               <button
                 type="button"
-                className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-white border border-gray-3 rounded-lg text-sm font-normal text-off-black hover:bg-gray-50 transition-colors"
+                onClick={() => setDescriptionType("note")}
+                className={cn(
+                  "flex items-center gap-1 px-5 py-3 bg-white rounded-full shadow-md shadow-black/8 hover:bg-gray-50 transition-colors cursor-pointer",
+                  descriptionType === "recording" ? "" : "hidden"
+                )}
               >
-                <Mic className="w-4 h-4" />
-                Record Audio
+                <MessageSquareMore className="stroke-dominant-purple-main w-5 h-5" />
+                <span className="text-dominant-purple-main text-sm font-normal leading-4 tracking-wide">
+                  Write note
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDescriptionType("recording")}
+                className={cn(
+                  "flex items-center gap-1 px-5 py-3 bg-white rounded-full shadow-md shadow-black/8 hover:bg-gray-50 transition-colors cursor-pointer",
+                  descriptionType === "note" ? "" : "hidden"
+                )}
+              >
+                <Mic className="stroke-dominant-purple-main w-5 h-5" />
+                <span className="text-dominant-purple-main text-sm font-normal leading-4 tracking-wide">
+                  Record Audio
+                </span>
               </button>
             </div>
           </div>
