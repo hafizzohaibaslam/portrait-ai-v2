@@ -2,12 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useGenieConversation } from "@/hooks/genie/useGenieConversation";
+import { useGenieHints } from "@/hooks/genie/useGenieHints";
+import { useGenieActions } from "@/hooks/genie/useGenieActions";
+import { useGenieFileUpload } from "@/hooks/genie/useGenieFileUpload";
 import GenieHintRenderer from "./GenieHintRenderer";
 import GenieActionHandler from "./GenieActionHandler";
 import GenieProgressIndicator from "./GenieProgressIndicator";
 import GenieWelcomeScreen from "./GenieWelcomeScreen";
 import GenieMessageList from "./GenieMessageList";
 import GenieChatInput from "./GenieChatInput";
+import GenieFileUpload from "./attachments/GenieFileUpload";
+import GenieDragDropOverlay from "./attachments/GenieDragDropOverlay";
 import type { GenieAction } from "@/types/genie";
 
 type GenieChatInterfaceProps = {
@@ -23,24 +28,47 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
     conversationId,
     messages,
     collectedData,
-    activeHints,
-    pendingAction,
+    activeHints: conversationHints,
+    pendingAction: conversationAction,
     isLoading,
     error,
     startConversation,
     continueConversation,
     retryLastMessage,
-    isActionReady,
+    isActionReady: conversationIsActionReady,
   } = useGenieConversation();
 
-  // File upload state (hint-based)
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  // Use separate hooks for hints and actions
+  const hints = useGenieHints(conversationHints);
+  const actions = useGenieActions(conversationAction);
+
+  // Sync hints and actions with conversation state
+  useEffect(() => {
+    hints.updateHints(conversationHints);
+  }, [conversationHints, hints]);
+
+  useEffect(() => {
+    actions.updateAction(conversationAction);
+  }, [conversationAction, actions]);
+
+  // File upload hook
+  const fileUpload = useGenieFileUpload();
+
+  // Show file upload when upload hint is present
+  useEffect(() => {
+    if (hints.uploadHint) {
+      fileUpload.showForHint(hints.uploadHint);
+    } else {
+      fileUpload.hideUpload();
+    }
+  }, [hints.uploadHint, fileUpload]);
+
   const [inputValue, setInputValue] = useState("");
   const [isRecording, setIsRecording] = useState(false);
 
   const handleActionComplete = () => {
-    if (pendingAction && onActionComplete) {
-      onActionComplete(pendingAction);
+    if (actions.pendingAction && onActionComplete) {
+      onActionComplete(actions.pendingAction);
     }
     // Optionally clear conversation after action completion
     // clearConversation();
@@ -53,21 +81,21 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
     if (
       messages.length === 0 &&
       conversationId === null &&
-      uploadedFiles.length > 0
+      fileUpload.files.length > 0
     ) {
       // Reset local state when conversation is cleared
       // Use setTimeout to avoid synchronous setState in effect
       const timeoutId = setTimeout(() => {
-        setUploadedFiles([]);
+        fileUpload.clearFiles();
         setInputValue("");
         setIsRecording(false);
       }, 0);
       return () => clearTimeout(timeoutId);
     }
-  }, [messages.length, conversationId, uploadedFiles.length]);
+  }, [messages.length, conversationId, fileUpload]);
 
   const handleSendMessage = async (message: string) => {
-    if (!message.trim() && uploadedFiles.length === 0) return;
+    if (!message.trim() && fileUpload.files.length === 0) return;
 
     if (conversationId) {
       await continueConversation(message);
@@ -76,7 +104,7 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
     }
 
     // Clear uploaded files after sending
-    setUploadedFiles([]);
+    fileUpload.clearFiles();
   };
 
   const handleSuggestionSelect = (suggestion: string) => {
@@ -86,32 +114,45 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
   // Show welcome screen when no messages
   const showWelcomeScreen = messages.length === 0 && !isLoading;
 
-  // Get upload hint if present
-  const uploadHint = activeHints.find((hint) => hint.action === "show_upload");
-
   return (
     <div className="flex flex-col h-full">
       {/* Progress Indicator */}
       {Object.keys(collectedData).length > 0 && (
         <GenieProgressIndicator
           collectedData={collectedData}
-          actionType={pendingAction?.action}
+          actionType={actions.pendingAction?.action}
           className="mb-4"
         />
       )}
 
       {/* Hint Renderer (for future hint-based UI) */}
-      <GenieHintRenderer hints={activeHints} />
+      <GenieHintRenderer hints={hints.activeHints} />
+
+      {/* File Upload Component */}
+      {fileUpload.isVisible && (
+        <GenieFileUpload
+          hint={hints.uploadHint}
+          files={fileUpload.files}
+          onFilesSelect={fileUpload.addFiles}
+          onRemove={fileUpload.removeFile}
+        />
+      )}
+
+      {/* Drag & Drop Overlay */}
+      <GenieDragDropOverlay
+        isActive={fileUpload.isDragActive}
+        hintLabel={fileUpload.hintLabel}
+      />
 
       {/* Action Handler */}
-      {isActionReady && pendingAction && (
+      {conversationIsActionReady && actions.pendingAction && (
         <GenieActionHandler
-          action={pendingAction}
+          action={actions.pendingAction}
           uploadedFiles={
-            uploadHint?.field === "profile_image"
-              ? { profile_image: uploadedFiles[0] }
-              : uploadHint?.field === "media_file"
-              ? { media_file: uploadedFiles[0] }
+            fileUpload.hintField === "profile_image"
+              ? { profile_image: fileUpload.files[0] }
+              : fileUpload.hintField === "media_file"
+              ? { media_file: fileUpload.files[0] }
               : {}
           }
           onComplete={handleActionComplete}
@@ -147,18 +188,25 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
       )}
 
       {/* Chat Input */}
-      <GenieChatInput
-        value={inputValue}
-        onChange={setInputValue}
-        onSend={handleSendMessage}
-        uploadHint={uploadHint || null}
-        uploadedFiles={uploadedFiles}
-        onFilesChange={setUploadedFiles}
-        isRecording={isRecording}
-        onRecordingToggle={() => setIsRecording(!isRecording)}
-        disabled={isLoading}
-        isLoading={isLoading}
-      />
+      <div
+        onDragEnter={fileUpload.handleDragEnter}
+        onDragLeave={fileUpload.handleDragLeave}
+        onDragOver={fileUpload.handleDragOver}
+        onDrop={fileUpload.handleDrop}
+      >
+        <GenieChatInput
+          value={inputValue}
+          onChange={setInputValue}
+          onSend={handleSendMessage}
+          uploadHint={hints.uploadHint}
+          uploadedFiles={fileUpload.files}
+          onFilesChange={fileUpload.addFiles}
+          isRecording={isRecording}
+          onRecordingToggle={() => setIsRecording(!isRecording)}
+          disabled={isLoading}
+          isLoading={isLoading}
+        />
+      </div>
     </div>
   );
 };

@@ -47,7 +47,9 @@ const GenieWelcomeScreen = ({
 
       {/* Suggestions */}
       <div className="pt-8">
-        <div className="text-sm text-gray-500 mb-4">Need ideas? Try these</div>
+        <div className="text-sm text-gray-500 mb-4 text-center">
+          Need ideas? Try these
+        </div>
         <div className="flex flex-wrap gap-2 justify-center max-w-2xl">
           {suggestions.map((text, index) => (
             <button

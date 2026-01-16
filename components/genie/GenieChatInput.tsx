@@ -86,50 +86,25 @@ const GenieChatInput = ({
     e.target.value = "";
   };
 
-  const removeFile = (index: number) => {
-    onFilesChange(uploadedFiles.filter((_, i) => i !== index));
-  };
-
   const canSend = value.trim().length > 0 || uploadedFiles.length > 0;
   const showUploadButton = uploadHint?.action === "show_upload";
 
   return (
     <div className={cn("sticky bottom-0 bg-white pt-4", className)}>
-      {/* File Attachment Previews */}
-      {uploadedFiles.length > 0 && (
-        <div className="flex gap-2 mb-2 overflow-x-auto px-2">
-          {uploadedFiles.map((file, idx) => (
-            <div
-              key={idx}
-              className="relative flex items-center bg-gray-100 rounded-lg p-2 border border-gray-200 shrink-0"
-            >
-              <div className="text-xs truncate max-w-[150px] text-gray-700">
-                {file.name}
-              </div>
-              <button
-                type="button"
-                className="ml-2 hover:bg-gray-200 rounded-full p-1 transition-colors"
-                onClick={() => removeFile(idx)}
-                aria-label="Remove file"
-              >
-                <X className="w-3 h-3 text-gray-500" />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* File Attachment Previews - Now handled by GenieFileUpload component */}
+      {/* Keeping this empty as previews are shown in GenieFileUpload */}
 
       {/* Voice Recording UI */}
       {isRecording ? (
-        <div className="relative border rounded-3xl p-4 shadow-sm bg-gray-50">
+        <div className="relative border border-gray-200 rounded-3xl p-4 shadow-sm bg-gray-50">
           <div className="absolute top-2 right-2 z-10">
             <button
               type="button"
               onClick={onRecordingToggle}
-              className="p-1 hover:bg-gray-200 rounded-full transition-colors"
+              className="p-1.5 hover:bg-gray-200 active:bg-gray-300 rounded-full transition-colors"
               aria-label="Cancel recording"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-gray-600" />
             </button>
           </div>
           <VoiceRecorderDynamic
@@ -144,17 +119,17 @@ const GenieChatInput = ({
         </div>
       ) : (
         /* Text Input Area */
-        <div className="relative flex items-end gap-2 border rounded-[26px] px-2 py-2 shadow-sm focus-within:ring-2 focus-within:ring-purple-100 transition-all bg-white">
+        <div className="relative flex items-end gap-2 border border-gray-200 rounded-[26px] px-3 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-purple-100 focus-within:border-purple-300 transition-all bg-white w-[95%] mx-auto">
           {/* File Upload Button (only shown when hint is active) */}
           {showUploadButton && (
-            <label className="cursor-pointer p-2 transition-colors hover:bg-gray-100 rounded-full mb-px">
-              <Paperclip className="w-5 h-5" />
+            <label className="cursor-pointer p-2 transition-colors hover:bg-gray-100 rounded-full mb-px shrink-0">
+              <Paperclip className="w-5 h-5 text-gray-600" />
               <input
                 type="file"
                 className="hidden"
                 multiple
                 accept={
-                  uploadHint.field === "profile_image" ? "image/*" : "*/*"
+                  uploadHint?.field === "profile_image" ? "image/*" : "*/*"
                 }
                 onChange={handleFileSelect}
               />
@@ -165,7 +140,7 @@ const GenieChatInput = ({
           <textarea
             ref={textareaRef}
             rows={1}
-            className="flex-1 bg-transparent border-none outline-none text-gray-700 placeholder:text-gray-400 text-sm resize-none py-2 max-h-[200px] overflow-y-auto"
+            className="flex-1 bg-transparent border-none outline-none text-gray-900 placeholder:text-gray-500 text-sm resize-none py-1.5 px-1 max-h-[200px] overflow-y-auto leading-relaxed disabled:opacity-50 disabled:cursor-not-allowed"
             placeholder="Ask me anything about preserving memories!"
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -179,7 +154,7 @@ const GenieChatInput = ({
               type="button"
               onClick={handleSend}
               disabled={disabled || isLoading}
-              className="cursor-pointer p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors mb-px disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursor-pointer p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 active:bg-purple-800 transition-colors mb-px shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-purple-600"
               aria-label="Send message"
             >
               <Send className="w-4 h-4" />
@@ -188,7 +163,7 @@ const GenieChatInput = ({
             <button
               type="button"
               onClick={onRecordingToggle}
-              className="cursor-pointer p-2 text-gray-400 hover:text-gray-600 transition-colors mb-px"
+              className="cursor-pointer p-2 text-gray-500 hover:text-gray-700 active:text-gray-900 transition-colors mb-px shrink-0"
               aria-label="Start voice recording"
             >
               <Mic className="w-5 h-5" />
@@ -198,7 +173,7 @@ const GenieChatInput = ({
       )}
 
       {/* Footer Text */}
-      <div className="text-center text-xs text-gray-400 mt-4">
+      <div className="text-center text-xs text-gray-500 mt-3 mb-1">
         Portrait Genie can make mistakes. Check important info.
       </div>
     </div>
