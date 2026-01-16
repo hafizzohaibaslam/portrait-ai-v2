@@ -120,9 +120,7 @@ const StepAddMemories = ({
       : descriptionType === "recording"
       ? title.trim().length > 0 && recording !== null
       : title.trim().length > 0 || description.trim().length > 0;
-
-  const submitButtonText =
-    activeTab === "upload" ? "Create Portrait" : "Upload Content";
+  const submitButtonText = "Create Memory";
 
   return (
     <div>

@@ -12,8 +12,7 @@ export type OnboardStep =
   | "form"
   | "portrait_image"
   | "profile_image"
-  | "memory_media"
-  | "memory_content";
+  | "memory";
 
 /**
  * Memory description input type

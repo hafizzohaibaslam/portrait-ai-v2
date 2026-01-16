@@ -2,12 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import type {
-  OnboardStep,
-  OnboardState,
-  MemoryDescriptionType,
-  MemoryFormData,
-} from "@/types/onboarding";
+import type { OnboardStep, OnboardState } from "@/types/onboarding";
 import type {
   CreatePortraitPayloadBase,
   Portrait,
@@ -17,8 +12,7 @@ const STEPS: OnboardStep[] = [
   "form",
   "portrait_image",
   "profile_image",
-  "memory_media",
-  "memory_content",
+  "memory",
 ];
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -26,7 +20,6 @@ export const useOnboardingFlow = () => {
   const router = useRouter();
   const [state, setState] = useState<OnboardState>({
     step: "form",
-    memoryDescriptionType: "note",
   });
 
   const updateState = useCallback((updates: Partial<OnboardState>) => {
@@ -70,35 +63,12 @@ export const useOnboardingFlow = () => {
     setState((prev) => ({ ...prev, profileImage: file }));
   }, []);
 
-  const updateMemoryFiles = useCallback((files: File[]) => {
-    setState((prev) => ({ ...prev, memoryFiles: files }));
-  }, []);
-
-  const updateMemoryForm = useCallback((data: Partial<MemoryFormData>) => {
-    setState((prev) => ({
-      ...prev,
-      memoryForm: { ...prev.memoryForm, ...data } as MemoryFormData,
-      memoryValidated: !!data.title,
-    }));
-  }, []);
-
-  const updateMemoryDescriptionType = useCallback(
-    (type: MemoryDescriptionType) => {
-      setState((prev) => ({ ...prev, memoryDescriptionType: type }));
-    },
-    []
-  );
-
   const setPortrait = useCallback((portrait: Portrait, portraitId: string) => {
     setState((prev) => ({
       ...prev,
       portrait,
       portraitId,
     }));
-  }, []);
-
-  const setMemoryId = useCallback((memoryId: string) => {
-    setState((prev) => ({ ...prev, memoryId }));
   }, []);
 
   const isYourOwn = state.create?.relation_type === "your-own";
@@ -112,11 +82,7 @@ export const useOnboardingFlow = () => {
     updatePortraitForm,
     updatePortraitImage,
     updateProfileImage,
-    updateMemoryFiles,
-    updateMemoryForm,
-    updateMemoryDescriptionType,
     setPortrait,
-    setMemoryId,
     isYourOwn,
   };
 };

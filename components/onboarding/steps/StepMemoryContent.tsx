@@ -29,7 +29,10 @@ const StepMemoryContent = ({
   isLoading = false,
   className,
 }: StepMemoryContentProps) => {
-  const isValid = !!memoryForm?.title?.trim();
+  const isValid =
+    descriptionType === "recording"
+      ? !!memoryForm?.title?.trim() && !!memoryForm?.recording
+      : !!memoryForm?.title?.trim() || !!memoryForm?.description?.trim();
 
   return (
     <div className={cn("space-y-6", className)}>
@@ -52,7 +55,7 @@ const StepMemoryContent = ({
           variant="white"
         />
 
-        <div>
+        <div className="h-fit">
           {descriptionType === "recording" ? (
             <VoiceRecorder
               onRecordingComplete={(data) => {
@@ -67,6 +70,7 @@ const StepMemoryContent = ({
               value={memoryForm?.description || ""}
               onChange={(value) => onChange({ description: value })}
               variant="white"
+              className="min-h-[100px]"
             />
           )}
         </div>
