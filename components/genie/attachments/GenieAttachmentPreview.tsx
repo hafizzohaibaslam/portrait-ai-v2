@@ -3,7 +3,6 @@
 import { X, File, Image as ImageIcon, Video, Music } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 
 type GenieAttachmentPreviewProps = {
   file: File;
@@ -72,9 +71,8 @@ const GenieAttachmentPreview = ({
 
       {/* Preview Content */}
       {isImage && previewUrl && !error ? (
-        <div className="relative w-full h-32 bg-gray-100">
-          <Image
-            fill
+        <div className="relative w-full h-24 bg-gray-100">
+          <img
             src={previewUrl}
             alt={file.name}
             className="w-full h-full object-cover"
@@ -82,7 +80,7 @@ const GenieAttachmentPreview = ({
           />
         </div>
       ) : isVideo && previewUrl ? (
-        <div className="relative w-full h-32 bg-gray-100">
+        <div className="relative w-full h-24 bg-gray-100">
           <video
             src={previewUrl}
             className="w-full h-full object-cover"
@@ -90,11 +88,11 @@ const GenieAttachmentPreview = ({
             onError={() => setError(true)}
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
-            <Video className="w-8 h-8 text-white" />
+            <Video className="w-6 h-6 text-white" />
           </div>
         </div>
       ) : (
-        <div className="w-full h-32 bg-gray-50 flex items-center justify-center">
+        <div className="w-full h-24 bg-gray-50 flex items-center justify-center">
           {getFileIcon()}
         </div>
       )}

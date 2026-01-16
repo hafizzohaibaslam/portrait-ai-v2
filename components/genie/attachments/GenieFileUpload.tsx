@@ -3,7 +3,6 @@
 import { Paperclip } from "lucide-react";
 import { cn } from "@/lib/utils";
 import GenieAttachmentPreview from "./GenieAttachmentPreview";
-import GenieDragDropOverlay from "./GenieDragDropOverlay";
 import type { GenieHint } from "@/types/genie";
 import { GENIE_FILE_LIMITS } from "@/utils/genie/constants";
 
@@ -53,16 +52,21 @@ const GenieFileUpload = ({
   };
 
   return (
-    <div className={cn("mb-4", className)}>
+    <div className={cn("px-2", className)}>
       {/* File Previews */}
       {files.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-3">
+        <div className="flex gap-2 mb-3 overflow-x-auto pb-2">
           {files.map((file, index) => (
-            <GenieAttachmentPreview
+            <div
               key={`${file.name}-${index}-${file.size}`}
-              file={file}
-              onRemove={() => onRemove(index)}
-            />
+              className="shrink-0"
+            >
+              <GenieAttachmentPreview
+                file={file}
+                onRemove={() => onRemove(index)}
+                className="w-32"
+              />
+            </div>
           ))}
         </div>
       )}
@@ -84,7 +88,8 @@ const GenieFileUpload = ({
 
       {/* Helper Text */}
       <div className="text-xs text-gray-500 mt-2">
-        Max {maxSize / (1024 * 1024)}MB per file, up to {GENIE_FILE_LIMITS.maxFiles} files
+        Max {maxSize / (1024 * 1024)}MB per file, up to{" "}
+        {GENIE_FILE_LIMITS.maxFiles} files
       </div>
     </div>
   );

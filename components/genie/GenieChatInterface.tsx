@@ -128,22 +128,6 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
       {/* Hint Renderer (for future hint-based UI) */}
       <GenieHintRenderer hints={hints.activeHints} />
 
-      {/* File Upload Component */}
-      {fileUpload.isVisible && (
-        <GenieFileUpload
-          hint={hints.uploadHint}
-          files={fileUpload.files}
-          onFilesSelect={fileUpload.addFiles}
-          onRemove={fileUpload.removeFile}
-        />
-      )}
-
-      {/* Drag & Drop Overlay */}
-      <GenieDragDropOverlay
-        isActive={fileUpload.isDragActive}
-        hintLabel={fileUpload.hintLabel}
-      />
-
       {/* Action Handler */}
       {conversationIsActionReady && actions.pendingAction && (
         <GenieActionHandler
@@ -186,6 +170,23 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
           </button>
         </div>
       )}
+
+      {/* File Upload Component - Below messages, above input */}
+      {fileUpload.isVisible && (
+        <GenieFileUpload
+          hint={hints.uploadHint}
+          files={fileUpload.files}
+          onFilesSelect={fileUpload.addFiles}
+          onRemove={fileUpload.removeFile}
+          className="mt-4"
+        />
+      )}
+
+      {/* Drag & Drop Overlay */}
+      <GenieDragDropOverlay
+        isActive={fileUpload.isDragActive}
+        hintLabel={fileUpload.hintLabel}
+      />
 
       {/* Chat Input */}
       <div
