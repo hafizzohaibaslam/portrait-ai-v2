@@ -2,7 +2,7 @@
 import { useRef } from "react";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardSecondaryNav from "@/components/dashboard/DashboardSecondaryNav";
-import AiPopupTrigger from "@/components/dashboard/AiPopupTrigger";
+import GeniePopupTrigger from "@/components/genie/GeniePopupTrigger";
 
 type DashboardLayoutProps = {
   children?: React.ReactNode;
@@ -18,7 +18,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <DashboardSecondaryNav className="my-6 md:my-10" />
         <div className="pb-8 lg:pb-24">{children}</div>
       </div>
-      <AiPopupTrigger />
+      <GeniePopupTrigger
+        containerRef={ref as React.RefObject<HTMLDivElement>}
+      />
     </div>
   );
 };
