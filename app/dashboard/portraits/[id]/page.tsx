@@ -1,5 +1,5 @@
 "use client";
-import { usePortraitHighlightsQuery } from "@/hooks/highlights/usePortraitHighlightsQuery";
+// import { usePortraitHighlightsQuery } from "@/hooks/highlights/usePortraitHighlightsQuery";
 import { useGetPortraitById } from "@/hooks/portraits/useGetPortraitById";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
@@ -12,8 +12,8 @@ const PortraitsDetailPage = () => {
   const { data: portrait, isLoading: portraitLoading } = useGetPortraitById(
     id as string
   );
-  const { data: highlights, isLoading: highlightsLoading } =
-    usePortraitHighlightsQuery(id as string);
+  // const { data: highlights, isLoading: highlightsLoading } =
+  //   usePortraitHighlightsQuery(id as string);
 
   if (portraitLoading) {
     return (
@@ -42,8 +42,8 @@ const PortraitsDetailPage = () => {
       />
       <PortraitHighlightsSection
         portrait={portrait}
-        highlights={highlights}
-        isLoading={highlightsLoading}
+        // highlights={highlights}
+        // isLoading={highlightsLoading}
       />
     </div>
   );
