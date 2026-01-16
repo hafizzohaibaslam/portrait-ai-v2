@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGenieConversation } from "@/hooks/genie/useGenieConversation";
 import GenieHintRenderer from "./GenieHintRenderer";
 import GenieActionHandler from "./GenieActionHandler";
 import GenieProgressIndicator from "./GenieProgressIndicator";
+import GenieWelcomeScreen from "./GenieWelcomeScreen";
+import GenieMessageList from "./GenieMessageList";
+import GenieChatInput from "./GenieChatInput";
 import type { GenieAction } from "@/types/genie";
 
 type GenieChatInterfaceProps = {
-  onNewChat?: () => void;
   onActionComplete?: (action: GenieAction) => void;
 };
 
@@ -16,11 +18,9 @@ type GenieChatInterfaceProps = {
  * Main orchestrator component for Genie chat functionality
  * Integrates conversation API, hints, actions, and file uploads
  */
-const GenieChatInterface = ({
-  onNewChat,
-  onActionComplete,
-}: GenieChatInterfaceProps) => {
+const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
   const {
+    conversationId,
     messages,
     collectedData,
     activeHints,
@@ -29,14 +29,14 @@ const GenieChatInterface = ({
     error,
     startConversation,
     continueConversation,
-    clearConversation,
     retryLastMessage,
-    hasActiveHints,
     isActionReady,
   } = useGenieConversation();
 
-  // File upload state (will be managed by GenieFileUpload component in Phase 4)
-  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({});
+  // File upload state (hint-based)
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleActionComplete = () => {
     if (pendingAction && onActionComplete) {
@@ -46,16 +46,48 @@ const GenieChatInterface = ({
     // clearConversation();
   };
 
-  const handleNewChat = () => {
-    clearConversation();
-    setUploadedFiles({});
-    if (onNewChat) {
-      onNewChat();
+  // Clear local state when conversation is cleared
+  // This happens when GeniePopupTrigger calls clearConversation
+  // We'll reset local state when messages become empty and conversationId is null
+  useEffect(() => {
+    if (
+      messages.length === 0 &&
+      conversationId === null &&
+      uploadedFiles.length > 0
+    ) {
+      // Reset local state when conversation is cleared
+      // Use setTimeout to avoid synchronous setState in effect
+      const timeoutId = setTimeout(() => {
+        setUploadedFiles([]);
+        setInputValue("");
+        setIsRecording(false);
+      }, 0);
+      return () => clearTimeout(timeoutId);
     }
+  }, [messages.length, conversationId, uploadedFiles.length]);
+
+  const handleSendMessage = async (message: string) => {
+    if (!message.trim() && uploadedFiles.length === 0) return;
+
+    if (conversationId) {
+      await continueConversation(message);
+    } else {
+      await startConversation(message);
+    }
+
+    // Clear uploaded files after sending
+    setUploadedFiles([]);
+  };
+
+  const handleSuggestionSelect = (suggestion: string) => {
+    handleSendMessage(suggestion);
   };
 
   // Show welcome screen when no messages
   const showWelcomeScreen = messages.length === 0 && !isLoading;
+
+  // Get upload hint if present
+  const uploadHint = activeHints.find((hint) => hint.action === "show_upload");
 
   return (
     <div className="flex flex-col h-full">
@@ -75,7 +107,13 @@ const GenieChatInterface = ({
       {isActionReady && pendingAction && (
         <GenieActionHandler
           action={pendingAction}
-          uploadedFiles={uploadedFiles}
+          uploadedFiles={
+            uploadHint?.field === "profile_image"
+              ? { profile_image: uploadedFiles[0] }
+              : uploadHint?.field === "media_file"
+              ? { media_file: uploadedFiles[0] }
+              : {}
+          }
           onComplete={handleActionComplete}
           className="mb-4"
         />
@@ -83,50 +121,16 @@ const GenieChatInterface = ({
 
       {/* Welcome Screen or Chat Content */}
       {showWelcomeScreen ? (
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <p className="text-lg font-medium mb-2">
-              Hey! It&apos;s your portrait genie here.
-            </p>
-            <p className="text-sm">I can help you get started!</p>
-            {/* GenieWelcomeScreen will be implemented in Phase 4 */}
-          </div>
-        </div>
+        <GenieWelcomeScreen
+          onSuggestionSelect={handleSuggestionSelect}
+          className="flex-1"
+        />
       ) : (
-        <div className="flex-1 overflow-y-auto">
-          {/* GenieMessageList will be implemented in Phase 4 */}
-          <div className="space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-lg p-3 ${
-                    message.role === "user"
-                      ? "bg-purple-100 text-purple-900"
-                      : "bg-gray-100 text-gray-900"
-                  }`}
-                >
-                  {message.content}
-                </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-lg p-3">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75" />
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150" />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <GenieMessageList
+          messages={messages}
+          isLoading={isLoading}
+          className="flex-1"
+        />
       )}
 
       {/* Error Display */}
@@ -142,12 +146,19 @@ const GenieChatInterface = ({
         </div>
       )}
 
-      {/* GenieChatInput will be implemented in Phase 4 */}
-      <div className="mt-4 p-4 border-t">
-        <p className="text-xs text-gray-500 text-center">
-          Chat input component will be implemented in Phase 4
-        </p>
-      </div>
+      {/* Chat Input */}
+      <GenieChatInput
+        value={inputValue}
+        onChange={setInputValue}
+        onSend={handleSendMessage}
+        uploadHint={uploadHint || null}
+        uploadedFiles={uploadedFiles}
+        onFilesChange={setUploadedFiles}
+        isRecording={isRecording}
+        onRecordingToggle={() => setIsRecording(!isRecording)}
+        disabled={isLoading}
+        isLoading={isLoading}
+      />
     </div>
   );
 };

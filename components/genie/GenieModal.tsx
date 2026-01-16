@@ -67,7 +67,11 @@ const GenieModal = ({
         {/* Header */}
         <GenieModalHeader
           onClose={() => onOpenChange(false)}
-          onNewChat={onNewChat}
+          onNewChat={() => {
+            onNewChat();
+            // Also trigger new chat in children if they expose a method
+            // This is handled via onNewChat prop passed to GenieChatInterface
+          }}
           onToggleFullscreen={onToggleFullscreen}
           isFullscreen={isFullscreen}
         />

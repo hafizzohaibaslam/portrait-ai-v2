@@ -1,6 +1,7 @@
 "use client";
 
 import { useGenieModalState } from "@/hooks/genie/useGenieModalState";
+import { useGenieConversation } from "@/hooks/genie/useGenieConversation";
 import GenieFloatingButton from "./GenieFloatingButton";
 import GenieModal from "./GenieModal";
 import GenieChatInterface from "./GenieChatInterface";
@@ -21,9 +22,13 @@ const GeniePopupTrigger = ({
   const { isOpen, isFullscreen, open, close, toggleFullscreen, startNewChat } =
     useGenieModalState();
 
+  // Get clearConversation from hook to clear conversation when new chat is clicked
+  const { clearConversation } = useGenieConversation();
+
   const handleNewChat = () => {
+    // Clear conversation state before starting new chat
+    clearConversation();
     startNewChat();
-    // Additional logic can be added here if needed
   };
 
   const handleActionComplete = () => {
@@ -52,10 +57,7 @@ const GeniePopupTrigger = ({
       onToggleFullscreen={toggleFullscreen}
       onNewChat={handleNewChat}
     >
-      <GenieChatInterface
-        onNewChat={handleNewChat}
-        onActionComplete={handleActionComplete}
-      />
+      <GenieChatInterface onActionComplete={handleActionComplete} />
     </GenieModal>
   );
 };

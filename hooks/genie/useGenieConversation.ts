@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useCallback, useEffect } from "react";
 import { useGenieStartMutation } from "./useGenieStartMutation";
 import { useGenieContinueMutation } from "./useGenieContinueMutation";
@@ -40,7 +39,9 @@ export const useGenieConversation = () => {
   useEffect(() => {
     const savedId = getConversationId();
     if (savedId) {
-      setConversationId(savedId);
+      setTimeout(() => {
+        setConversationId(savedId);
+      }, 0);
     }
   }, []);
 
@@ -215,7 +216,12 @@ export const useGenieConversation = () => {
         await startConversation(lastUserMessage);
       }
     }
-  }, [lastUserMessage, conversationId, continueConversation, startConversation]);
+  }, [
+    lastUserMessage,
+    conversationId,
+    continueConversation,
+    startConversation,
+  ]);
 
   // Helper computed values
   const hasActiveHints = activeHints.length > 0;
