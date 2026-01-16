@@ -1,7 +1,3 @@
-// import { FileWithPath } from "react-dropzone";
-// import { CreatePortraitBody, Portrait } from "../../utils/types/portrait";
-// import { createPortraitFileUploadItemProps } from "../portrait/popup-create-manual-memory-upload";
-
 import { RelationType } from "./global-types";
 import { CreatePortraitPayloadBase, Portrait } from "./portrait-types";
 
