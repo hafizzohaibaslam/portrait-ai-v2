@@ -87,7 +87,7 @@ export const useGenieConversation = () => {
 
   // Start a new conversation
   const startConversation = useCallback(
-    async (message: string) => {
+    async (message: string, attachments?: GenieMessage["attachments"]) => {
       setError(null);
       setLastUserMessage(message);
 
@@ -96,6 +96,7 @@ export const useGenieConversation = () => {
         id: generateMessageId(),
         role: "user",
         content: message,
+        attachments,
         timestamp: Date.now(),
       };
       setMessages((prev) => [...prev, userMessage]);
@@ -135,10 +136,10 @@ export const useGenieConversation = () => {
 
   // Continue existing conversation
   const continueConversation = useCallback(
-    async (message: string) => {
+    async (message: string, attachments?: GenieMessage["attachments"]) => {
       if (!conversationId) {
         // If no conversation ID, start new conversation
-        await startConversation(message);
+        await startConversation(message, attachments);
         return;
       }
 
@@ -150,6 +151,7 @@ export const useGenieConversation = () => {
         id: generateMessageId(),
         role: "user",
         content: message,
+        attachments,
         timestamp: Date.now(),
       };
       setMessages((prev) => [...prev, userMessage]);

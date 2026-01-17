@@ -1,10 +1,14 @@
 "use client";
 
 import type { GenieHint } from "@/types/genie";
+import GenieActionButtons from "./actions/GenieActionButtons";
+import GenieMemoryTypeSelector from "./actions/GenieMemoryTypeSelector";
 
 type GenieHintRendererProps = {
   hints: GenieHint[];
-  onFileSelect?: (files: File[], field: string) => void;
+  onActionSelect?: (hint: GenieHint, value: string) => void;
+  onMemoryTypeSelect?: (type: "media" | "voice" | "content") => void;
+  className?: string;
 };
 
 /**
@@ -12,18 +16,59 @@ type GenieHintRendererProps = {
  */
 const GenieHintRenderer = ({
   hints,
-  onFileSelect,
+  onActionSelect,
+  onMemoryTypeSelect,
+  className,
 }: GenieHintRendererProps) => {
-  // Find upload hint if present
-  const uploadHint = hints.find((hint) => hint.action === "show_upload");
+  // Find relevant hints
+  const addMemoryHint = hints.find((hint) => hint.action === "add_memory");
+  const durationHint = hints.find((hint) => hint.action === "select_duration");
+  const memoryTypeHint = hints.find(
+    (hint) => hint.action === "select_memory_type"
+  );
 
-  if (!uploadHint) {
-    return null;
-  }
+  const handleActionSelect = (hint: GenieHint, value: string) => {
+    if (onActionSelect) {
+      onActionSelect(hint, value);
+    }
+  };
 
-  // For now, we'll return null and let GenieFileUpload handle the UI
-  // This component can be extended to render other hint types in the future
-  return null;
+  const handleMemoryTypeSelect = (type: "media" | "voice" | "content") => {
+    if (onMemoryTypeSelect) {
+      onMemoryTypeSelect(type);
+    }
+  };
+
+  return (
+    <div className={className}>
+      {/* Add Memory Button */}
+      {addMemoryHint && (
+        <button
+          onClick={() => handleActionSelect(addMemoryHint, "add_memory")}
+          className="mb-4 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-medium transition-colors"
+        >
+          Add New Memory
+        </button>
+      )}
+
+      {/* Memory Type Selector */}
+      {memoryTypeHint && (
+        <GenieMemoryTypeSelector
+          onSelect={handleMemoryTypeSelect}
+          className="mb-4"
+        />
+      )}
+
+      {/* Duration Selection */}
+      {durationHint && (
+        <GenieActionButtons
+          hint={durationHint}
+          onSelect={(value) => handleActionSelect(durationHint, value)}
+          className="mb-4"
+        />
+      )}
+    </div>
+  );
 };
 
 export default GenieHintRenderer;

@@ -3,6 +3,7 @@
 import { X, File, Image as ImageIcon, Video, Music } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 type GenieAttachmentPreviewProps = {
   file: File;
@@ -72,7 +73,8 @@ const GenieAttachmentPreview = ({
       {/* Preview Content */}
       {isImage && previewUrl && !error ? (
         <div className="relative w-full h-24 bg-gray-100">
-          <img
+          <Image
+            fill
             src={previewUrl}
             alt={file.name}
             className="w-full h-full object-cover"

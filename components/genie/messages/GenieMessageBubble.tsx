@@ -3,6 +3,12 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { GenieMessage } from "@/types/genie";
+import { getMediaTypeFromUrl } from "@/utils/genie/media-helpers";
+import GenieMediaGrid from "../media/GenieMediaGrid";
+import GenieHighlightPlayer from "../media/GenieHighlightPlayer";
+import GenieAudioPlayer from "../media/GenieAudioPlayer";
+import GeniePortraitCard from "../cards/GeniePortraitCard";
+import GenieHighlightCard from "../cards/GenieHighlightCard";
 
 type GenieMessageBubbleProps = {
   message: GenieMessage;
@@ -12,12 +18,27 @@ type GenieMessageBubbleProps = {
 /**
  * Individual message bubble component
  * Displays user and assistant messages with appropriate styling
+ * Handles media display logic: single video → HighlightPlayer, multiple → MediaGrid, single audio → AudioPlayer
  */
 const GenieMessageBubble = ({
   message,
   isLatest = false,
 }: GenieMessageBubbleProps) => {
   const isUser = message.role === "user";
+
+  // Separate attachments by type - use attachment.type instead of URL detection
+  const attachments = message.attachments || [];
+  const audioAttachments = attachments.filter((att) => att.type === "audio");
+  const visualAttachments = attachments.filter(
+    (att) => att.type === "image" || att.type === "video"
+  );
+  const allMediaAttachments = attachments.filter((att) => att.type !== "file");
+
+  // Determine display logic
+  const hasSingleAudio = audioAttachments.length === 1 && attachments.length === 1;
+  const hasSingleVideo =
+    visualAttachments.length === 1 && visualAttachments[0]?.type === "video";
+  const hasMultipleMedia = allMediaAttachments.length > 1;
 
   return (
     <div
@@ -54,27 +75,47 @@ const GenieMessageBubble = ({
           </div>
         )}
 
-        {/* Attachments */}
-        {message.attachments && message.attachments.length > 0 && (
-          <div
-            className={cn(
-              "flex flex-wrap gap-2",
-              isUser ? "justify-end" : "justify-start"
-            )}
-          >
-            {message.attachments.map((attachment, idx) => (
-              <div
-                key={idx}
-                className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs text-gray-600"
-              >
-                {attachment.name}
-              </div>
-            ))}
-          </div>
+        {/* Portrait Card */}
+        {message.portraitCard && (
+          <GeniePortraitCard
+            portraitId={message.portraitCard.portrait_id}
+            imageUrl={message.portraitCard.image_url}
+            name={message.portraitCard.name}
+            className={cn(isUser && "ml-auto")}
+          />
         )}
 
-        {/* Loading State */}
-        {message.isLoading && (
+        {/* Highlight Card */}
+        {message.highlightCard && (
+          <GenieHighlightCard
+            highlightId={message.highlightCard.highlight_id}
+            videoUrl={message.highlightCard.video_url}
+            title={message.highlightCard.title}
+            className={cn(isUser && "ml-auto")}
+          />
+        )}
+
+        {/* Media Display Logic */}
+        {hasSingleAudio ? (
+          <GenieAudioPlayer
+            src={audioAttachments[0]?.url}
+            title={audioAttachments[0]?.name}
+            isUser={isUser}
+          />
+        ) : hasSingleVideo && !hasMultipleMedia ? (
+          <GenieHighlightPlayer
+            src={visualAttachments[0]?.url}
+            isUser={isUser}
+          />
+        ) : allMediaAttachments.length > 0 ? (
+          <GenieMediaGrid
+            attachments={allMediaAttachments}
+            isUser={isUser}
+          />
+        ) : null}
+
+        {/* Loading State - Only show for assistant messages */}
+        {message.isLoading && message.role === "assistant" && (
           <div className="flex items-center gap-2 text-gray-400 text-sm">
             <div className="flex space-x-1">
               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />

@@ -1,7 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { AudioWaveform, FileText, Image as ImageIcon, Video } from "lucide-react";
+import {
+  AudioWaveform,
+  FileText,
+  Image as ImageIcon,
+  Video,
+} from "lucide-react";
 import type { Memory } from "@/types/memory-types";
 import { cn } from "@/lib/utils";
 
@@ -11,10 +16,13 @@ type MemoryCardProps = {
   className?: string;
 };
 
-const getMemoryType = (mediaUrl: string | null): "image" | "video" | "audio" | "document" => {
+const getMemoryType = (
+  mediaUrl: string | null
+): "image" | "video" | "audio" | "document" => {
   if (!mediaUrl) return "document";
   const extension = mediaUrl.split(".").pop()?.toLowerCase();
-  if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension || "")) return "image";
+  if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension || ""))
+    return "image";
   if (["mp4", "webm", "mov"].includes(extension || "")) return "video";
   if (["mp3", "wav", "ogg"].includes(extension || "")) return "audio";
   return "document";
@@ -46,7 +54,7 @@ const MemoryCard = ({ memory, onClick, className }: MemoryCardProps) => {
       {/* Visual Area */}
       <div
         className={cn(
-          "relative w-full aspect-[4/3] rounded-2xl flex flex-col items-center justify-center overflow-hidden",
+          "relative w-full aspect-4/3 rounded-2xl flex flex-col items-center justify-center overflow-hidden",
           hasVisual ? "bg-gray-100" : "bg-accent-purple-001"
         )}
       >

@@ -1,13 +1,30 @@
 // Genie AI Types
 
 // API Response Structure
-export type GenieHintAction = "show_upload";
+export type GenieHintAction =
+  | "show_upload"
+  | "add_memory"
+  | "select_memory_type"
+  | "select_duration"
+  | "show_portrait_card"
+  | "show_highlight_card"
+  | "new_description";
 
 export type GenieHint = {
   action: GenieHintAction;
   field?: "profile_image" | "media_file";
   label?: string;
-  metadata?: Record<string, unknown>;
+  metadata?: {
+    durations?: string[];
+    memory_types?: string[];
+    portrait_id?: string;
+    highlight_id?: string;
+    image_url?: string;
+    video_url?: string;
+    title?: string;
+    name?: string;
+    [key: string]: unknown;
+  };
 };
 
 export type GenieActionType = "create_portrait" | "create_memory";
@@ -62,6 +79,16 @@ export type GenieMessage = {
   timestamp: number;
   isLoading?: boolean;
   error?: string;
+  portraitCard?: {
+    portrait_id: string;
+    image_url: string;
+    name: string;
+  };
+  highlightCard?: {
+    highlight_id: string;
+    video_url: string;
+    title: string;
+  };
 };
 
 // Conversation State

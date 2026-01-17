@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { Mic, Paperclip, Send, X } from "lucide-react";
+import { Mic, Paperclip, SendHorizonal, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { GENIE_TEXTAREA_LIMITS } from "@/utils/genie/constants";
@@ -24,6 +24,7 @@ type GenieChatInputProps = {
   // Voice recording
   isRecording: boolean;
   onRecordingToggle: () => void;
+  onAudioRecordingComplete?: (file: File) => void;
   disabled?: boolean;
   isLoading?: boolean;
   className?: string;
@@ -42,6 +43,7 @@ const GenieChatInput = ({
   onFilesChange,
   isRecording,
   onRecordingToggle,
+  onAudioRecordingComplete,
   disabled = false,
   isLoading = false,
   className,
@@ -110,7 +112,13 @@ const GenieChatInput = ({
           <VoiceRecorderDynamic
             onRecordingComplete={(data) => {
               if (data.file) {
-                onFilesChange([...uploadedFiles, data.file]);
+                if (onAudioRecordingComplete) {
+                  // Send audio immediately
+                  onAudioRecordingComplete(data.file);
+                } else {
+                  // Fallback: add to files (for backward compatibility)
+                  onFilesChange([...uploadedFiles, data.file]);
+                }
                 onRecordingToggle();
               }
             }}
@@ -119,7 +127,7 @@ const GenieChatInput = ({
         </div>
       ) : (
         /* Text Input Area */
-        <div className="relative flex items-end gap-2 border border-gray-200 rounded-[26px] px-3 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-purple-100 focus-within:border-purple-300 transition-all bg-white w-[95%] mx-auto">
+        <div className="relative flex items-center gap-2 rounded-[10px] border border-[#E8E8EA] px-3 py-[11px] w-full mx-auto">
           {/* File Upload Button (only shown when hint is active) */}
           {showUploadButton && (
             <label className="cursor-pointer p-2 transition-colors hover:bg-gray-100 rounded-full mb-px shrink-0">
@@ -140,7 +148,8 @@ const GenieChatInput = ({
           <textarea
             ref={textareaRef}
             rows={1}
-            className="flex-1 bg-transparent border-none outline-none text-gray-900 placeholder:text-gray-500 text-sm resize-none py-1.5 px-1 max-h-[200px] overflow-y-auto leading-relaxed disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 resize-none outline-none"
+            // className="flex-1 bg-transparent border-none outline-none text-gray-900 placeholder:text-gray-500 text-sm resize-none py-1.5 px-1 max-h-[200px] overflow-y-auto leading-relaxed disabled:opacity-50 disabled:cursor-not-allowed"
             placeholder="Ask me anything about preserving memories!"
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -154,10 +163,10 @@ const GenieChatInput = ({
               type="button"
               onClick={handleSend}
               disabled={disabled || isLoading}
-              className="cursor-pointer p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 active:bg-purple-800 transition-colors mb-px shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-purple-600"
+              className="cursor-pointer p-2 text-white rounded-full transition-colors mb-px shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Send message"
             >
-              <Send className="w-4 h-4" />
+              <SendHorizonal className="w-5 h-5 text-dominant-purple-main" />
             </button>
           ) : (
             <button
