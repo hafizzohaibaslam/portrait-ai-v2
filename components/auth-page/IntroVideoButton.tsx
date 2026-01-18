@@ -26,22 +26,24 @@ const IntroVideoButton = ({ className }: IntroVideoButtonProps) => {
         <button
           type="button"
           className={cn(
-            "cursor-pointer flex items-center p-2 bg-white rounded-md w-full",
+            "cursor-pointer rounded-[8px] flex gap-2 items-center p-2 bg-white w-full",
             className
           )}
         >
           <video
-            className="w-14 h-11 rounded-sm lg:rounded-md overflow-hidden object-cover object-top bg-gray-1"
+            className="w-[56px] h-[44px] rounded-sm overflow-hidden object-cover object-top"
             src="/videos/onboard-intro.webm"
             poster="/icons/onboard-intro.png"
             muted
           />
-          <div className="pl-2 flex-1 flex items-center justify-between">
-            <div>
-              <div>Curious how it all works?</div>
-              <div className="text-sm mt-[2px] text-off-gray">
+          <div className="flex-1 flex gap-2 items-center justify-between">
+            <div className="space-y-[2px]">
+              <h3 className="font-normal text-[14px] leading-[100%] tracking-[-3%] text-off-black">
+                Curious how it all works?
+              </h3>
+              <span className="font-light text-[12px] leading-[100%] tracking-[-3%] text-off-gray">
                 Watch this video to learn more
-              </div>
+              </span>
             </div>
             <PlayButtonIcon />
           </div>
@@ -64,15 +66,9 @@ const IntroVideoButton = ({ className }: IntroVideoButtonProps) => {
 // Play Button Icon Component
 const PlayButtonIcon = () => {
   return (
-    <div className="cursor-pointer fill-dominant-purple-main w-fit h-fit p-2 rounded-full bg-dominant-purple-main/20">
-      <div className="w-fit h-fit rounded-full p-[6px] bg-brown-2">
-        <svg
-          className="w-[22px] h-[22px] rounded-full overflow-hidden"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
-          <path d="M8 5v14l11-7z" />
-        </svg>
+    <div className="cursor-pointer p-[4.5px] rounded-full bg-dominant-purple-main/10 ">
+      <div className="w-[27px] h-[27px] rounded-full p-[6px] bg-brown-2 flex items-center justify-center">
+        <Image src="/icons/play.png" alt="Play" width={10} height={10} />
       </div>
     </div>
   );

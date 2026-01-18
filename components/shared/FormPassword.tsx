@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import FormFieldWrapper from "./FormFieldWrapper";
+import Image from "next/image";
 
 // Base props that extend HTML input element props (for password type)
 type BaseFormPasswordProps = Omit<
@@ -56,11 +57,7 @@ const FormPassword = ({
           aria-label={showPassword ? "Hide password" : "Show password"}
           disabled={disabled}
         >
-          {showPassword ? (
-            <EyeOff className="w-5 h-5 text-gray-8" />
-          ) : (
-            <Eye className="w-5 h-5 text-gray-8" />
-          )}
+          <Image src="/icons/eye.png" alt="Eye" width={20} height={20} />
         </button>
       </FormFieldWrapper>
       {error && (

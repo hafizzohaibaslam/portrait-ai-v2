@@ -8,8 +8,10 @@ const AuthVideoSidebar = () => {
         {/* Overlay Text */}
         <div className="absolute w-full p-5 z-10">
           <div className="relative">
-            <div className="absolute w-full px-4 py-3 rounded-xl flex items-center justify-between bg-gray-2/64 text-white text-lg">
-              <span>Each memory makes the portrait richer.</span>
+            <div className="absolute w-full p-4 rounded-[12px] flex gap-1 items-center justify-between bg-black-3">
+              <span className="font-normal text-[20px] leading-[100%] tracking-[-3%] text-white">
+                Each memory makes the portrait richer.
+              </span>
               <Image
                 src="/images/icon-app-icon-light.png"
                 alt="Portrait AI"

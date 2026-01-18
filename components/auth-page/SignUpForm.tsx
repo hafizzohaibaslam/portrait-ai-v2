@@ -12,6 +12,7 @@ import ThemedButton from "@/components/shared/ThemedButton";
 import SsoButton from "@/components/auth-page/SsoButton";
 import { useSignUpMutation } from "@/hooks/auth/useSignUpMutation";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 type SignUpFormProps = {
   className?: string;
@@ -49,9 +50,9 @@ const SignUpForm = ({ className }: SignUpFormProps) => {
     signUpMutation({ email, password, name, phone_number });
   };
   return (
-    <form onSubmit={handleSubmit} className={className}>
+    <form onSubmit={handleSubmit} className={cn("space-y-5", className)}>
       {/* Form Fields */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         <FormInput
           label="Full Name"
           type="text"
@@ -114,7 +115,7 @@ const SignUpForm = ({ className }: SignUpFormProps) => {
       </div>
 
       {/* Submit Button */}
-      <div className="mt-5 font-medium">
+      <div className="font-medium space-y-6">
         <ThemedButton
           variant="black"
           className="mt-5 w-full"
@@ -126,7 +127,7 @@ const SignUpForm = ({ className }: SignUpFormProps) => {
         </ThemedButton>
 
         {/* SSO Button */}
-        <SsoButton type="sign-up" variant="white" className="mt-6 w-full" />
+        <SsoButton type="sign-up" variant="white" className="w-full" />
       </div>
     </form>
   );

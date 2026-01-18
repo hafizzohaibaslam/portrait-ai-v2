@@ -14,7 +14,7 @@ const AuthFooterLink = ({ type, className }: AuthFooterLinkProps) => {
   return (
     <div className={cn("text-center", className)}>
       <span className="text-off-gray font-light">
-        {isSignUp ? "Don't have an account? " : "Already have an account? "}
+        {isSignUp ? "Already have an account? " : "Don't have an account? "}
       </span>
       <Link
         href={isSignUp ? "/auth/sign-in" : "/auth/sign-up"}

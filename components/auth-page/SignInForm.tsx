@@ -8,6 +8,7 @@ import ThemedButton from "@/components/shared/ThemedButton";
 import SsoButton from "@/components/auth-page/SsoButton";
 import { toast } from "sonner";
 import { useSignInMutation } from "@/hooks/auth/useSignInMutation";
+import { cn } from "@/lib/utils";
 
 type SignInFormProps = {
   className?: string;
@@ -34,9 +35,9 @@ const SignInForm = ({ className }: SignInFormProps) => {
     signInMutation({ email, password });
   };
   return (
-    <form onSubmit={handleSubmit} className={className}>
+    <form onSubmit={handleSubmit} className={cn("space-y-5", className)}>
       {/* Form Fields */}
-      <div className="mt-6 space-y-4">
+      <div className="space-y-3">
         <FormInput
           label="Email"
           type="email"
@@ -61,11 +62,11 @@ const SignInForm = ({ className }: SignInFormProps) => {
       </Link>
 
       {/* Submit Button */}
-      <div className="mt-5 font-medium">
+      <div className="font-medium space-y-6">
         <ThemedButton
           type="submit"
           variant="black"
-          className="mt-5 w-full"
+          className="w-full"
           loading={isPending}
           disabled={isPending}
         >
@@ -73,7 +74,7 @@ const SignInForm = ({ className }: SignInFormProps) => {
         </ThemedButton>
 
         {/* SSO Button */}
-        <SsoButton type="sign-in" variant="white" className="mt-6 w-full" />
+        <SsoButton type="sign-in" variant="white" className="w-full" />
       </div>
     </form>
   );

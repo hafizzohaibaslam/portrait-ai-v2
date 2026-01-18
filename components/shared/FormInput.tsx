@@ -39,7 +39,11 @@ const FormInput = ({
 
   return (
     <div className={className}>
-      {label && <div className="mb-2">{label}</div>}
+      {label && (
+        <div className="mb-1 font-normal text-[16px] leading-[28px] tracking-[-3%] text-off-black">
+          {label}
+        </div>
+      )}
       <FormFieldWrapper variant={variant} disabled={disabled} error={!!error}>
         <input
           type={type}

@@ -5,24 +5,34 @@ import AuthFooterLink from "@/components/auth-page/AuthFooterLink";
 import AuthVideoSidebar from "@/components/auth-page/AuthVideoSidebar";
 import SignInForm from "@/components/auth-page/SignInForm";
 
-export default function SignInPage() {
+const SignInPage = () => {
   return (
-    <div className="bg-purple-4 flex h-screen overflow-y-auto">
+    <div className="bg-purple-4 flex h-screen overflow-hidden">
       {/* Left Side - Form */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col h-full overflow-y-auto">
         <AuthHeader />
-        <div className="px-5 py-10 md:px-12 pb-12 flex-1 flex flex-col max-w-[530px] w-full mx-auto justify-center">
-          <h1 className="text-center text-3xl">Welcome Back</h1>
-          <p className="text-center mt-1 text-off-gray">
-            Log in to uncover and relive your exciting memories!
-          </p>
-          <IntroVideoButton className="mt-6 mb-4" />
-          <SignInForm />
-          <AuthFooterLink type="sign-in" className="mt-12" />
+        <div className="flex-1 flex flex-col max-w-[400px] w-full mx-auto justify-center pb-1">
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <h1 className="font-normal text-[32px] leading-[40px] tracking-[-3%] text-off-black text-center">
+                Welcome Back
+              </h1>
+              <p className="font-light text-[16px] leading-[28px] tracking-[-3%] text-off-gray text-center">
+                Log in to uncover and relive your exciting memories!
+              </p>
+            </div>
+            <IntroVideoButton />
+          </div>
+          <div className="space-y-6">
+            <SignInForm />
+            <AuthFooterLink type="sign-in" className="" />
+          </div>
         </div>
       </div>
       {/* Right Side - Video */}
       <AuthVideoSidebar />
     </div>
   );
-}
+};
+
+export default SignInPage;

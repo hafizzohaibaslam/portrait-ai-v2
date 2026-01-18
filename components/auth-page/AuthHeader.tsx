@@ -1,7 +1,6 @@
 "use client";
-import Link from "next/link";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import AppBrand from "@/components/shared/AppBrand";
 
 type AuthHeaderProps = {
   className?: string;
@@ -15,19 +14,7 @@ const AuthHeader = ({ className }: AuthHeaderProps) => {
         className
       )}
     >
-      <Link
-        href="/"
-        className="flex items-center font-semibold text-lg lg:text-2xl"
-      >
-        <Image
-          src="/images/icon-app-icon.png"
-          alt="Portrait AI"
-          width={32}
-          height={32}
-          className="w-6 lg:w-8"
-        />
-        <span className="pl-1 lg:pl-2">Portrait AI</span>
-      </Link>
+      <AppBrand />
     </header>
   );
 };
