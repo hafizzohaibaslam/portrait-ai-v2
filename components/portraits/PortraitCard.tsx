@@ -19,7 +19,7 @@ const PortraitCard = ({
     <PortraitCardWrapper
       className={cn("cursor-pointer group/PortraitCard", className)}
     >
-      <div className="h-[180px] rounded-md overflow-hidden">
+      <div className="h-[172px] w-full rounded-[4px] overflow-hidden">
         {coverNode ?? (
           <div
             style={{
@@ -31,11 +31,10 @@ const PortraitCard = ({
           />
         )}
       </div>
-      <div className="mt-3">
-        <div className="text-lg font-medium text-off-black hover:underline">
-          {portrait.name}
-        </div>
-      </div>
+
+      <span className="font-medium text-[18px] leading-[20px] tracking-[-3%] text-off-black hover:underline">
+        {portrait.name}
+      </span>
     </PortraitCardWrapper>
   );
 };

@@ -12,11 +12,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   return (
-    <div ref={ref} className={"h-screen overflow-y-auto"}>
+    <div
+      ref={ref}
+      className={"h-screen overflow-y-auto py-7 px-5 flex flex-col gap-15"}
+    >
       <DashboardHeader />
-      <div className="px-4 md:px-10 lg:px-30">
-        <DashboardSecondaryNav className="my-6 md:my-10" />
-        <div className="pb-8 lg:pb-24">{children}</div>
+      <div className="w-full max-w-[1272px] mx-auto flex flex-col gap-12">
+        <DashboardSecondaryNav />
+        {children}
       </div>
       <GeniePopupTrigger
         containerRef={ref as React.RefObject<HTMLDivElement>}

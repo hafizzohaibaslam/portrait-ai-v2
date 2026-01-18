@@ -13,7 +13,7 @@ const HighlightCardWrapper = ({
   return (
     <div
       className={cn(
-        "rounded-2xl overflow-hidden min-h-[240px] lg:min-h-[300px]",
+        "rounded-[12px] w-full min-w-[306px] overflow-hidden min-h-[240px]",
         className
       )}
     >

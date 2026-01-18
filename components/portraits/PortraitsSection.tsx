@@ -17,9 +17,9 @@ const PortraitsSection = ({ className }: PortraitsSectionProps) => {
   const { data: portraits, isLoading } = useGetAllRelatedPortraits();
 
   return (
-    <section className={cn("", className)}>
+    <section className={cn("flex flex-col gap-6", className)}>
       <PortraitSectionHeader title="Portraits" />
-      <PortraitGrid className="mt-6">
+      <PortraitGrid>
         <CreatePortraitCard />
         {isLoading ? (
           <>
@@ -44,7 +44,7 @@ const PortraitsSection = ({ className }: PortraitsSectionProps) => {
         ) : null}
       </PortraitGrid>
       {portraits && portraits.length > 0 && (
-        <SeeAllLink href="/dashboard/portraits" className="mt-4" />
+        <SeeAllLink href="/dashboard/portraits" />
       )}
     </section>
   );

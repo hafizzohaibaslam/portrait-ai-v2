@@ -38,11 +38,15 @@ const UserMenu = ({ className }: UserMenuProps) => {
         <UserMenuTrigger user={user} />
         <DropdownMenuContent
           align="end"
-          sideOffset={20}
-          className={cn("w-3xs p-0", className)}
+          sideOffset={10}
+          className={cn(
+            "w-[300px] p-0! border border-[#EAEAEA] rounded-[8px] shadow",
+            className
+          )}
         >
-          <div className="px-3 py-2 divide-y-2 divide-black/80 *:py-3 md:*:py-4">
+          <div className="flex flex-col">
             <UserMenuHeader user={user} onItemClick={() => setIsOpen(false)} />
+            <div className="w-full h-px bg-[#00000014]" />
             <UserMenuItems
               items={menuItems}
               onItemClick={() => setIsOpen(false)}

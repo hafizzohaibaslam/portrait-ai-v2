@@ -17,9 +17,9 @@ const HighlightsSection = ({ className }: HighlightsSectionProps) => {
   // const { data: highlights, isLoading, error } = useGetAllHighlights();
 
   return (
-    <section className={cn("", className)}>
+    <section className={cn("flex flex-col gap-6", className)}>
       <HighlightSectionHeader title="Your Highlights" />
-      <HighlightGrid className="mt-6">
+      <HighlightGrid>
         <CreateHighlightCard />
         {/* {isLoading ? (
           <>
@@ -43,7 +43,7 @@ const HighlightsSection = ({ className }: HighlightsSectionProps) => {
         ) : null} */}
       </HighlightGrid>
       {/* {highlights && highlights.length > 0 && ( */}
-      <SeeAllLink href="/dashboard/highlights" className="mt-4" />
+      <SeeAllLink href="/dashboard/highlights" />
       {/* )} */}
     </section>
   );

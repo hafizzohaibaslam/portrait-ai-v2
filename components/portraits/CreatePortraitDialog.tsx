@@ -26,14 +26,7 @@ const CreatePortraitDialog = ({ onClose }: CreatePortraitDialogProps = {}) => {
     <DialogContent
       showCloseButton={false}
       className={cn(
-        "bottom-4 top-[unset] translate-y-0",
-        "md:bottom-[unset] md:top-[50%] md:translate-y-[-50%]",
-        "block p-8 pt-0 outline-0",
-        "rounded-xl md:rounded-2xl",
-        "overflow-y-auto",
-        "w-full max-w-[950px]!",
-        "h-auto max-h-[90vh] md:max-h-[92vh]",
-        "border-none"
+        "w-[95%] mx-auto max-w-[1080px]! h-auto max-h-[652px]! flex flex-col overflow-y-auto"
       )}
     >
       <DialogTitle className="sr-only">Create a new Portrait</DialogTitle>
@@ -42,13 +35,11 @@ const CreatePortraitDialog = ({ onClose }: CreatePortraitDialogProps = {}) => {
       </DialogDescription>
       <DialogHeader onClose={handleClose} />
 
-      <div>
-        <CreatePortraitStepRenderer
-          state={state}
-          handlers={handlers}
-          onClose={handleClose}
-        />
-      </div>
+      <CreatePortraitStepRenderer
+        state={state}
+        handlers={handlers}
+        onClose={handleClose}
+      />
     </DialogContent>
   );
 };

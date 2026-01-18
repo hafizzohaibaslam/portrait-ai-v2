@@ -43,15 +43,17 @@ const StepChooseProcess = ({ onSelect }: StepChooseProcessProps) => {
   ];
 
   return (
-    <div>
-      <div className="max-w-[500px]">
-        <div className="text-xl lg:text-[28px]">Create a new Portrait</div>
-        <div className="font-light text-lg mt-4">
+    <div className="flex-1 flex flex-col gap-[47px]">
+      <div className="space-y-4 w-full max-w-[486px]">
+        <h1 className="font-normal text-[28px] leading-[40px] tracking-[-3%] text-off-black">
+          Create a new Portrait
+        </h1>
+        <p className="font-light text-[16px] leading-[28px] tracking-[-3%] text-off-black">
           Every person is unique and their story matters. Get started now by
           adding context to the Portrait.
-        </div>
+        </p>
       </div>
-      <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6 text-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {cards.map((card, i) => (
           <div
             key={i}
@@ -62,16 +64,16 @@ const StepChooseProcess = ({ onSelect }: StepChooseProcessProps) => {
               // AI option is not functional for now
             }}
             className={cn(
-              "transition-ease cursor-pointer rounded-xl flex flex-col items-center justify-between p-8 border-2 border-purple-03",
+              "transition-ease cursor-pointer rounded-[20px] flex flex-col gap-[24px] items-center justify-between p-[34px] border-2 border-purple-03",
               card.theme === "secondary"
                 ? "hover:bg-purple-04"
                 : "bg-linear-to-t from-purple-04 to-accent-purple-001/64 hover:bg-accent-purple-001"
             )}
           >
-            <div className="flex flex-col items-center">
+            <div className="w-full max-w-[417px] mx-auto flex flex-col items-center">
               <div
                 className={cn(
-                  "p-4 w-fit h-fit *:w-[32px] *:h-[32px] rounded-2xl",
+                  "p-4 w-fit h-fit *:w-[32px] *:h-[32px] rounded-[16px]",
                   card.theme === "secondary"
                     ? "bg-accent-purple-001 *:stroke-dominant-purple-main"
                     : "bg-dominant-purple-main *:stroke-white"
@@ -79,23 +81,22 @@ const StepChooseProcess = ({ onSelect }: StepChooseProcessProps) => {
               >
                 {card.iconNode}
               </div>
-              <div className="text-2xl mt-6">{card.title}</div>
+              <h1 className="text-center font-normal text-[22px] leading-[33px] tracking-[-0.66px] mt-6 mb-3">
+                {card.title}
+              </h1>
               {card.tag ? (
                 <div
                   className={cn(
-                    "mt-3 rounded-full px-3 py-1 text-xs",
-                    card.theme === "primary"
-                      ? ""
-                      : "bg-dominant-purple-main text-white"
+                    "px-[10px] py-1  bg-dominant-purple-main rounded-full font-normal text-[11px] leading-[16.5px] tracking-0 text-white uppercase"
                   )}
                 >
-                  {card.tag}
+                  {card.tag || "RECOMMENDED"}
                 </div>
               ) : undefined}
             </div>
-            <div className="mt-6 font-light text-gray-7">
+            <p className="font-light text-[16px] leading-[24px] tracking-0 text-gray-7 text-center">
               {card.description}
-            </div>
+            </p>
           </div>
         ))}
       </div>

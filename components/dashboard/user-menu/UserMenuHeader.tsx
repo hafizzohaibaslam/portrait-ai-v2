@@ -13,14 +13,16 @@ const UserMenuHeader = ({ user, onItemClick }: UserMenuHeaderProps) => {
     <Link
       href="/dashboard/settings"
       onClick={onItemClick}
-      className="flex items-center cursor-pointer w-full hover:bg-gray-03 rounded-sm transition-colors"
+      className="flex gap-3 items-center cursor-pointer w-full hover:bg-gray-03 rounded-sm transition-colors py-[11px] px-[13px]"
     >
-      <UserAvatar src={user?.profile_image_url} name={user?.name} size="md" />
-      <div className="pl-3 flex-1 overflow-hidden">
-        <div className="text-lg line-clamp-1 font-semibold">
+      <UserAvatar src={user?.profile_image_url} name={user?.name} size="sm" />
+      <div className="flex flex-col overflow-hidden">
+        <h3 className="font-normal text-[16px] leading-[24px] tracking-[0] text-off-black">
           {user?.name || "User"}
-        </div>
-        <div className="text-black-004 line-clamp-1 text-sm">{user?.email}</div>
+        </h3>
+        <span className="font-normal text-[16px] leading-[24px] tracking-[0] text-gray-11">
+          {user?.email}
+        </span>
       </div>
     </Link>
   );

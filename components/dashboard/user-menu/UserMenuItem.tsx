@@ -16,28 +16,39 @@ const UserMenuItem = ({ item, onItemClick, className }: UserMenuItemProps) => {
   const content = (
     <div
       className={cn(
-        "flex items-center w-full text-base font-normal",
-        isDestructive
-          ? "text-red-1 fill-red-1 focus:text-red-1 focus:fill-red-1"
-          : "fill-dominant-purple-main",
+        "flex gap-2 items-center rounded-[6px] py-[10px] px-2",
         item.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className
       )}
     >
       <div
         className={cn(
-          "*:w-[20px] *:h-[20px] md:*:w-[24px] md:*:h-[24px] rounded-xl p-2 md:p-3 aspect-square",
+          "w-[32px] h-[32px] p-2 rounded-[10px] aspect-square",
           isDestructive
             ? "bg-red-2"
-            : "bg-accent-purple-001 *:stroke-dominant-purple-main"
+            : "bg-accent-purple-001 stroke-dominant-purple-main"
         )}
       >
-        <Icon />
+        <Icon
+          className={cn(
+            "w-4 h-4",
+            isDestructive
+              ? "text-red-1 focus:text-red-1"
+              : "text-dominant-purple-main"
+          )}
+        />
       </div>
-      <div className="pl-3 flex items-center">
-        <div>{item.label}</div>
+      <div className="flex-1 flex items-center gap-2">
+        <span
+          className={cn(
+            "font-normal text-[14px] leading-[24px] tracking-0",
+            isDestructive ? "text-red-1" : "text-off-black"
+          )}
+        >
+          {item.label}
+        </span>
         {item.badge && (
-          <div className="ml-2 px-2 py-1 rounded-full whitespace-nowrap text-xs text-dominant-purple-main border border-purple-02 bg-purple-01">
+          <div className=" px-2 py-1 rounded-full whitespace-nowrap text-xs text-dominant-purple-main border border-purple-02 bg-purple-01">
             {item.badge}
           </div>
         )}
@@ -50,7 +61,7 @@ const UserMenuItem = ({ item, onItemClick, className }: UserMenuItemProps) => {
       <Link
         href={item.href}
         onClick={onItemClick}
-        className="block hover:bg-gray-03 rounded-sm transition-colors"
+        className="block hover:bg-gray-03 rounded-sm transition-colors p-1"
       >
         {content}
       </Link>
@@ -66,7 +77,7 @@ const UserMenuItem = ({ item, onItemClick, className }: UserMenuItemProps) => {
         }
       }}
       disabled={item.disabled}
-      className="block w-full hover:bg-gray-03 rounded-sm transition-colors disabled:hover:bg-transparent"
+      className="block w-full hover:bg-gray-03 rounded-sm transition-colors disabled:hover:bg-transparent p-1"
     >
       {content}
     </button>

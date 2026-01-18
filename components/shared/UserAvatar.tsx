@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,7 +22,6 @@ export const UserAvatar = ({
   size = "sm",
   className,
 }: UserAvatarProps) => {
-  const initials = name?.[0]?.toUpperCase() || "U";
   const sizeClasses = SIZE_CLASSES[size];
 
   if (src) {

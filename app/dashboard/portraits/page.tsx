@@ -3,7 +3,7 @@ import HighlightsSection from "@/components/highlights/HighlightsSection";
 
 const PortraitsPage = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-[70px]">
       <PortraitsSection />
       <HighlightsSection />
     </div>

@@ -1,34 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Search, Clock, TrendingUp, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
+  DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import AppBrand from "@/components/shared/AppBrand";
 import NavChip from "./NavChip";
 
-type SearchModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-};
-
-const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
-  const router = useRouter();
+const SearchModal = () => {
   const [query, setQuery] = useState("");
-
-  const handleSearch = (searchTerm: string) => {
-    onOpenChange(false);
-    router.push(`/dashboard/search?q=${encodeURIComponent(searchTerm)}`);
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && query.trim()) {
-      handleSearch(query);
+      console.log(query);
     }
   };
 
@@ -37,7 +27,15 @@ const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
   const suggestions: string[] = [];
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog>
+      <DialogTrigger asChild>
+        <button className="py-2 px-3 flex items-center gap-2 rounded-[24px] shadow cursor-pointer">
+          <Search className="w-[14px] h-[14px] stroke-dominant-purple-main" />
+          <span className="font-normal text-[14px] leading-[16px] tracking-[1.5%] text-off-gray">
+            Search for anything
+          </span>
+        </button>
+      </DialogTrigger>
       <DialogTitle className="sr-only">Search</DialogTitle>
       <DialogDescription className="sr-only">
         Search for memories, highlights, people, and more.
@@ -49,12 +47,11 @@ const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
         <div className="p-6 md:p-8 flex flex-col">
           <div className="flex items-center justify-between mb-8">
             <AppBrand href="/dashboard" />
-            <button
-              onClick={() => onOpenChange(false)}
-              className="outline-none hover:bg-gray-100 p-2 rounded-full transition-colors"
-            >
-              <X className="w-5 h-5 text-gray-500" />
-            </button>
+            <DialogClose asChild>
+              <button className="outline-none hover:bg-gray-100 p-2 rounded-full transition-colors">
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </DialogClose>
           </div>
 
           <div className="relative mb-10">

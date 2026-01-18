@@ -59,14 +59,14 @@ const StepManualCreation = ({ onNext }: StepManualCreationProps) => {
       if (response.portrait) {
         onNext(response.portrait);
       }
-    } catch (error) {
+    } catch {
       // Error is handled by mutation
     }
   };
 
   return (
-    <div>
-      <div className="flex flex-col gap-2 mb-8 md:mb-12">
+    <div className="flex-1 flex flex-col gap-6">
+      <div className="space-y-2 w-full max-w-[486px]">
         <h2 className="text-off-black text-[28px] font-normal font-primary leading-10">
           Create a new Portrait
         </h2>
@@ -75,65 +75,62 @@ const StepManualCreation = ({ onNext }: StepManualCreationProps) => {
           adding context to the Portrait.
         </p>
       </div>
-      <div>
-        <div className="space-y-4">
-          <FormInput
-            label="Name of Portrait owner"
-            placeholder="Portrait Name"
-            value={name}
-            onChange={setName}
-            variant="white"
-          />
 
+      <div className="space-y-3">
+        <FormInput
+          label="Name of Portrait owner"
+          placeholder="Portrait Name"
+          value={name}
+          onChange={setName}
+          variant="white"
+        />
+
+        <FormSelect
+          label="Whose Portrait are you crafting or contributing towards?"
+          placeholder="Select option"
+          options={RELATION_TYPE_OPTIONS}
+          value={relationType}
+          onChange={(value) => {
+            setRelationType(value as RelationType);
+            if (value === "your-own") {
+              setIsLiving("");
+            }
+          }}
+        />
+
+        {isRelative && (
           <FormSelect
-            label="Whose Portrait are you crafting or contributing towards?"
+            label="Is this person currently living?"
             placeholder="Select option"
-            options={RELATION_TYPE_OPTIONS}
-            value={relationType}
-            onChange={(value) => {
-              setRelationType(value as RelationType);
-              if (value === "your-own") {
-                setIsLiving("");
-              }
-            }}
-            variant="white"
+            options={IS_LIVING_OPTIONS}
+            value={isLiving}
+            onChange={setIsLiving}
           />
-
-          {isRelative && (
-            <FormSelect
-              label="Is this person currently living?"
-              placeholder="Select option"
-              options={IS_LIVING_OPTIONS}
-              value={isLiving}
-              onChange={setIsLiving}
-              variant="white"
-            />
-          )}
-        </div>
-
-        <div className="mt-6">
-          <label className="block text-sm font-medium mb-4 text-off-black">
-            Profile Image (Optional)
-          </label>
-          <PictureDropzone
-            value={profileImage}
-            onChange={setProfileImage}
-            maxFileSize={MAX_FILE_SIZE}
-          />
-        </div>
-
-        <ThemedButton
-          variant="black"
-          onClick={handleSubmit}
-          disabled={!isValid || mutation.isPending}
-          loading={mutation.isPending}
-          className="mt-8 py-3! w-fit mx-auto md:px-16! block"
-          rounded="lg"
-        >
-          <span className="lg:hidden">Continue</span>
-          <span className="hidden lg:inline">Create Portrait</span>
-        </ThemedButton>
+        )}
       </div>
+
+      <div className="">
+        <label className="block text-sm font-medium mb-4 text-off-black">
+          Profile Image (Optional)
+        </label>
+        <PictureDropzone
+          value={profileImage}
+          onChange={setProfileImage}
+          maxFileSize={MAX_FILE_SIZE}
+        />
+      </div>
+
+      <ThemedButton
+        variant="black"
+        onClick={handleSubmit}
+        disabled={!isValid || mutation.isPending}
+        loading={mutation.isPending}
+        className="black-button! rounded-[24px]! w-fit! mx-auto"
+        rounded="lg"
+      >
+        <span className="lg:hidden">Continue</span>
+        <span className="hidden lg:inline">Create Portrait</span>
+      </ThemedButton>
     </div>
   );
 };

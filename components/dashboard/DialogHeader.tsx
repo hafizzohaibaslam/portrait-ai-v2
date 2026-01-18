@@ -11,18 +11,15 @@ type DialogHeaderProps = {
 const DialogHeader = ({ onClose, className }: DialogHeaderProps) => {
   return (
     <div
-      className={cn(
-        "z-1 sticky top-0 flex items-center justify-between bg-white pt-8 pb-4 mb-2 md:mb-8",
-        className
-      )}
+      className={cn("flex items-center justify-between bg-white", className)}
     >
       <AppBrand href="/dashboard" />
       <button
         onClick={onClose}
-        className="cursor-pointer bg-gray-6 rounded-full p-3 hover:bg-gray-4 transition-colors"
+        className="w-9 h-9 cursor-pointer bg-gray-6 rounded-full p-2 hover:bg-gray-4 transition-colors"
         aria-label="Close dialog"
       >
-        <X className="stroke-[1px] stroke-off-black w-5 h-5" />
+        <X className="w-5 h-5" />
       </button>
     </div>
   );

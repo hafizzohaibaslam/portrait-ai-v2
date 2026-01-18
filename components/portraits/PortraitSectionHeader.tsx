@@ -12,7 +12,12 @@ const PortraitSectionHeader = ({
   className,
 }: PortraitSectionHeaderProps) => {
   return (
-    <div className={cn("text-2xl font-semibold text-off-black", className)}>
+    <div
+      className={cn(
+        "font-normal text-[24px] leading-[40px] tracking-[-3%] text-off-black",
+        className
+      )}
+    >
       {title}
     </div>
   );
