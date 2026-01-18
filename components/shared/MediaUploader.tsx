@@ -148,41 +148,14 @@ const MediaUploader = ({
             <div className="max-w-[500px]">
               {title && <div className="text-xl lg:text-[28px]">{title}</div>}
               {description && (
-                <div className="font-light text-lg mt-4">{description}</div>
+                <div className="font-light text-lg">{description}</div>
               )}
             </div>
           )}
-          {/* {showShareButton && onShare && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div
-                    onClick={onShare}
-                    className="w-fit mt-4 lg:mt-0 cursor-pointer"
-                  >
-                    <div className="flex items-center bg-accent-purple-001 rounded-full px-4 py-3">
-                      <Users className="fill-off-black w-[24px] h-[24px] text-off-black" />
-                      <div className="pl-1">Share Portrait</div>
-                    </div>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="top"
-                  align="end"
-                  className="bg-white border border-accent-purple-001 text-off-black max-w-[200px] p-3 rounded-md"
-                >
-                  <span>
-                    Share this portrait with others so they can add their
-                    contributions.
-                  </span>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )} */}
         </div>
       )}
-      <div className={cn(hasHeader && "mt-12")}>
-        <div className={cn(hasFiles ? "lg:flex items-stretch" : "")}>
+      <div className={cn(hasHeader && "")}>
+        <div className={cn(hasFiles ? "lg:flex lg:gap-4 items-stretch" : "")}>
           <DashedBorderWrapper
             divProps={dropzone.getRootProps()}
             className={cn(
@@ -223,7 +196,7 @@ const MediaUploader = ({
           </DashedBorderWrapper>
           <>
             {hasFiles ? (
-              <div className="mt-8 lg:mt-0 pl-4 flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="flex-1 grid gap-1 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {files.map((file, index) => {
                   const previewUrl = previewUrls[index];
                   return (
@@ -262,7 +235,7 @@ const MediaUploader = ({
                 })}
               </div>
             ) : (
-              <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+              <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
                 {getInputCardTypes().map((cardType, i) => (
                   <label
                     key={i}

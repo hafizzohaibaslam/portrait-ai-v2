@@ -123,21 +123,18 @@ const StepAddMemories = ({
   const submitButtonText = "Create Memory";
 
   return (
-    <div>
-      <div className="max-w-[500px]">
-        <div className="text-xl lg:text-[28px]">
+    <div className={cn("space-y-6")}>
+      <div className="space-y-1">
+        <h1 className="font-normal text-[32px] leading-[40px] tracking-[-3%] text-off-black">
           Add memory to &quot;{portrait.name}&quot;
-        </div>
-        <div className="font-light text-lg mt-4">
+        </h1>
+        <p className="font-light text-[18px] leading-[28px] tracking-[-3%] text-off-gray">
           Upload files or create content on portrait AI
-        </div>
+        </p>
       </div>
 
-      <div className="mt-8">
-        <MemoryCreationTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      </div>
-
-      <div className="mt-8">
+      <MemoryCreationTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <div className="">
         {activeTab === "upload" ? (
           <MediaUploader
             files={files}
@@ -209,7 +206,7 @@ const StepAddMemories = ({
         )}
       </div>
 
-      <div className="mt-8 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <button
           onClick={onNext}
           className="text-off-gray hover:underline cursor-pointer"
@@ -219,7 +216,7 @@ const StepAddMemories = ({
         <ThemedButton
           onClick={handleSubmit}
           variant="black"
-          className="py-3! w-fit md:px-16!"
+          className="black-button! rounded-[24px]!"
           rounded="lg"
           loading={createMemoryMutation.isPending}
           disabled={!isValid || !portrait.portrait_id}

@@ -69,65 +69,65 @@ const StepPortraitForm = ({
   return (
     <div className={cn("space-y-6", className)}>
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold text-off-black">
-          Create a new Portrait
+        <h1 className="font-normal text-[32px] leading-[40px] tracking-[-3%] text-off-black">
+          Lets start a Portrait
         </h1>
-        <p className="font-normal text-[18px] leading-[28px] text-[#8D8D8D]">
+        <p className="font-light text-[18px] leading-[28px] tracking-[-3%] text-off-gray">
           Get started now by adding content to a portrait.
         </p>
       </div>
 
-      <div className="space-y-3">
-        <FormInput
-          label="Name of Portrait owner"
-          placeholder="Portrait Name"
-          value={name}
-          onChange={setName}
-          variant="white"
-        />
-
-        <FormSelect
-          label="Whose Portrait are you crafting or contributing towards?"
-          placeholder="Select option"
-          options={RELATION_TYPE_OPTIONS}
-          value={relationType}
-          onChange={(value) => {
-            setRelationType(value as RelationType);
-            if (value === "your-own") {
-              setIsLiving("");
-            }
-          }}
-          variant="white"
-        />
-
-        {isRelative && (
-          <FormSelect
-            label="Is this person currently living?"
-            placeholder="Select option"
-            options={IS_LIVING_OPTIONS}
-            value={isLiving}
-            onChange={setIsLiving}
-            variant="white"
+      <div className="space-y-[28px]">
+        <div className="space-y-3">
+          <FormInput
+            label="Name of Portrait owner"
+            placeholder="Portrait Name"
+            value={name}
+            onChange={setName}
           />
-        )}
 
-        <ThemedButton
-          variant="black"
-          className="mt-8 w-full py-4 disabled:hover:bg-off-black disabled:hover:text-white"
-          rounded="lg"
-          disabled={!isValid}
-          onClick={handleSubmit}
-        >
-          Continue
-        </ThemedButton>
+          <FormSelect
+            label="Whose Portrait are you crafting or contributing towards?"
+            placeholder="Select option"
+            options={RELATION_TYPE_OPTIONS}
+            value={relationType}
+            onChange={(value) => {
+              setRelationType(value as RelationType);
+              if (value === "your-own") {
+                setIsLiving("");
+              }
+            }}
+          />
 
-        <button
-          onClick={onSkip}
-          className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] mt-6 hover:underline w-full cursor-pointer"
-          type="button"
-        >
-          Skip for now
-        </button>
+          {isRelative && (
+            <FormSelect
+              label="Is this person currently living?"
+              placeholder="Select option"
+              options={IS_LIVING_OPTIONS}
+              value={isLiving}
+              onChange={setIsLiving}
+            />
+          )}
+        </div>
+        <div className="space-y-6">
+          <ThemedButton
+            variant="black"
+            className="black-button! rounded-[24px]! w-full!"
+            rounded="lg"
+            disabled={!isValid}
+            onClick={handleSubmit}
+          >
+            Create Portrait
+          </ThemedButton>
+
+          <button
+            onClick={onSkip}
+            className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] hover:underline w-full cursor-pointer"
+            type="button"
+          >
+            Skip for now
+          </button>
+        </div>
       </div>
     </div>
   );

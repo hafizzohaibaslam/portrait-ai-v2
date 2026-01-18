@@ -1,7 +1,11 @@
 "use client";
-
-import { ChevronDown } from "lucide-react";
-import FormFieldWrapper from "./FormFieldWrapper";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 type SelectOption = {
@@ -15,7 +19,6 @@ type FormSelectProps = {
   value?: string;
   placeholder?: string;
   error?: string;
-  variant?: "white" | "gray";
   onChange?: (value: string) => void;
   disabled?: boolean;
   className?: string;
@@ -27,7 +30,6 @@ const FormSelect = ({
   value,
   placeholder = "Select option",
   error,
-  variant = "white",
   onChange,
   disabled,
   className,
@@ -35,32 +37,38 @@ const FormSelect = ({
   return (
     <div className={className}>
       {label && <div className="mb-2">{label}</div>}
-      <FormFieldWrapper variant={variant} disabled={disabled} error={!!error}>
-        <div className="relative flex items-center w-full">
-          <select
-            value={value || ""}
-            onChange={(e) => onChange?.(e.target.value)}
-            disabled={disabled}
-            className={cn(
-              "bg-transparent flex-1 w-full h-full outline-none appearance-none pr-8 cursor-pointer",
-              !value && "text-gray-500"
-            )}
-          >
-            <option value="" disabled>
-              {placeholder}
-            </option>
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown
-            className="absolute right-0 w-4 h-4 text-gray-6 pointer-events-none"
-            aria-hidden="true"
+      <Select value={value} onValueChange={onChange} disabled={disabled}>
+        <SelectTrigger
+          className={cn(
+            "w-full bg-white rounded-[8px] border border-gray-4 shadow-none focus:ring-0 focus:ring-offset-0",
+            "py-[13px]! px-[16px]! h-auto!",
+            "[&_svg]:text-gray-6"
+          )}
+        >
+          <SelectValue
+            placeholder={placeholder}
+            className="font-light! text-[14px]! leading-[20px]! tracking-[3%]! text-gray-5!"
           />
-        </div>
-      </FormFieldWrapper>
+        </SelectTrigger>
+
+        <SelectContent
+          position="popper"
+          align="start"
+          className={cn(
+            "bg-white border p-0! border-gray-4 rounded-none! shadow-lg rounded-bl-[8px]! rounded-br-[8px]!"
+          )}
+        >
+          {options.map((option) => (
+            <SelectItem
+              key={option.value}
+              value={option.value}
+              className="hover:bg-[#6731471F]! py-3!"
+            >
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       {error && (
         <div className="text-red-500 text-xs mt-1 font-medium">{error}</div>
       )}

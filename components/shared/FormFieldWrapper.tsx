@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const fieldWrapperVariants = cva(
-  "flex items-center p-4 rounded-lg border-[1px] border-gray-4",
+  "flex items-center p-4 rounded-lg border border-gray-4",
   {
     variants: {
       variant: {

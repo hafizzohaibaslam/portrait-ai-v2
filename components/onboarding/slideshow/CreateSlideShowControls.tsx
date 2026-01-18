@@ -14,7 +14,7 @@ type CreateSlideShowControlsProps = {
 
 const CreateSlideShowControls = (props: CreateSlideShowControlsProps) => {
   const buttonBaseClass =
-    "w-fit h-fit p-4 border-[1px] border-dominant-purple-main rounded-full fill-dominant-purple-main stroke-[1px] stroke-dominant-purple-main";
+    "w-[56px] h-[56px] p-[11px] border-[1px] border-dominant-purple-main rounded-full flex items-center justify-center";
   const buttonEnabledClass = "cursor-pointer";
   const buttonDisabledClass = "cursor-not-allowed opacity-[.5]";
 
@@ -27,7 +27,7 @@ const CreateSlideShowControls = (props: CreateSlideShowControlsProps) => {
           props.canPrev ? buttonEnabledClass : buttonDisabledClass
         )}
       >
-        <ChevronLeft />
+        <ChevronLeft size={35} color="#673147" />
       </div>
 
       <div className="flex items-center justify-center">
@@ -51,7 +51,7 @@ const CreateSlideShowControls = (props: CreateSlideShowControlsProps) => {
           props.canNext ? buttonEnabledClass : buttonDisabledClass
         )}
       >
-        <ChevronRight />
+        <ChevronRight size={35} color="#673147" />
       </div>
     </div>
   );

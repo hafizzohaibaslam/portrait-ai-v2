@@ -134,7 +134,7 @@ const OnboardingFlow = ({ className }: OnboardingFlowProps) => {
             formData={state.create}
             onNext={handlePortraitFormSubmit}
             onSkip={skipToDashboard}
-            className="flex-1 px-5 py-10 md:px-10 pb-12 flex flex-col max-w-[580px] w-full mx-auto lg:mx-0 justify-center"
+            className="flex-1 flex flex-col w-full max-w-[500px] mx-auto justify-center"
           />
         );
       case "portrait_image":
@@ -144,7 +144,7 @@ const OnboardingFlow = ({ className }: OnboardingFlowProps) => {
             onChange={updatePortraitImage}
             onNext={handlePortraitImageNext}
             onSkip={goToNextStep}
-            className="flex-1 px-5 py-10 md:px-10 pb-12 flex flex-col max-w-[580px] w-full mx-auto lg:mx-0 justify-center"
+            className="flex-1 flex flex-col w-full max-w-[500px] mx-auto justify-center"
           />
         );
       case "profile_image":
@@ -155,7 +155,7 @@ const OnboardingFlow = ({ className }: OnboardingFlowProps) => {
             onNext={handleProfileImageNext}
             onSkip={handleProfileImageNext}
             isLoading={createPortraitMutation.isPending}
-            className="flex-1 px-5 py-10 md:px-10 pb-12 flex flex-col max-w-[580px] w-full mx-auto lg:mx-0 justify-center"
+            className="flex-1 flex flex-col w-full max-w-[500px] mx-auto justify-center"
           />
         );
       case "memory":
@@ -165,7 +165,7 @@ const OnboardingFlow = ({ className }: OnboardingFlowProps) => {
           return null;
         }
         return (
-          <div className="flex-1 px-5 py-10 md:px-10 pb-12 flex flex-col max-w-[580px] w-full mx-auto lg:mx-0 justify-center">
+          <div className="flex-1 flex flex-col w-full max-w-[580px] mx-auto justify-center">
             <StepAddMemories
               portrait={state.portrait}
               onNext={skipToDashboard}

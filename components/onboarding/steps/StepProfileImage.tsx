@@ -25,25 +25,27 @@ const StepProfileImage = ({
   return (
     <div className={cn("space-y-6", className)}>
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold text-off-black">
+        <h1 className="font-normal text-[32px] leading-[40px] tracking-[-3%] text-off-black">
           Upload your profile picture
         </h1>
-        <p className="font-normal text-[18px] leading-[28px] text-[#8D8D8D]">
+        <p className="font-light text-[18px] leading-[28px] tracking-[-3%] text-off-gray">
           Add your profile picture to help Portrait AI and your contributors
           recognize your profile.
         </p>
       </div>
 
+      <div className="space-y-[28px]"></div>
       <div className="space-y-3">
         <PictureDropzone
           value={profileImage}
           onChange={onChange}
           maxFileSize={MAX_FILE_SIZE}
         />
-
+      </div>
+      <div className="space-y-6">
         <ThemedButton
           variant="black"
-          className="mt-8 w-full py-4 disabled:hover:bg-off-black disabled:hover:text-white"
+          className="black-button! rounded-[24px]! w-full!"
           rounded="lg"
           loading={isLoading}
           onClick={onNext}
@@ -52,7 +54,7 @@ const StepProfileImage = ({
         </ThemedButton>
         <button
           onClick={onSkip}
-          className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] mt-6 hover:underline w-full cursor-pointer"
+          className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] hover:underline w-full cursor-pointer"
           type="button"
         >
           Skip for now
