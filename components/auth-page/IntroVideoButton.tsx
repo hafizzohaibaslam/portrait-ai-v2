@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import {
@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import AppBrand from "../shared/AppBrand";
 
 type IntroVideoButtonProps = {
   className?: string;
@@ -81,57 +81,45 @@ type IntroVideoModalProps = {
 
 const IntroVideoModal = ({ onClose }: IntroVideoModalProps) => {
   return (
-    <div>
-      <header className="bg-white sticky top-0 p-5 lg:px-12 lg:py-6 flex items-center justify-center md:justify-between border-b-2 border-b-gray-1 lg:border-solid">
-        <Link
-          href="/"
-          className="flex items-center font-semibold text-lg lg:text-2xl"
-        >
-          <Image
-            src="/images/icon-app-icon.png"
-            alt="Portrait AI"
-            width={32}
-            height={32}
-            className="w-6 lg:w-8"
-          />
-          <span className="pl-1 lg:pl-2">Portrait AI</span>
-        </Link>
+    <div className="flex flex-col">
+      <header className="bg-white py-4 px-6 flex items-center justify-center md:justify-between border-b border-gray-10">
+        <AppBrand href="/" />
         <button
           onClick={onClose}
-          className="hidden md:block cursor-pointer bg-gray-6 rounded-full p-3"
+          className="cursor-pointer bg-gray-6 rounded-full p-2 w-9 h-9 flex items-center justify-center"
           aria-label="Close"
         >
-          <svg
-            className="stroke-[1px] stroke-off-black w-5 h-5"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M18 6L6 18M6 6l12 12"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
+          <X className="w-5 h-5 text-off-black" />
         </button>
       </header>
-      <div className="mt-6 md:mt-7 px-5 md:px-20 lg:px-[140px] pb-14">
-        <button
-          onClick={onClose}
-          className="md:hidden cursor-pointer mb-3"
-          aria-label="Close"
-        >
-          <ArrowLeft className="w-7 h-7" />
-        </button>
-        <h2 className="text-3xl font-medium">Welcome to Portrait AI</h2>
-        <p className="font-light text-lg mt-2">
-          Watch this video to learn more
-        </p>
-        <video
-          src="/videos/onboard-intro.webm"
-          poster="/icons/onboard-intro.png"
-          className="mt-8 mx-auto w-full h-[60vh] bg-off-black rounded-md md:rounded-2xl lg:rounded-3xl object-contain"
-          controls
-        />
+      <div className="py-[40px] px-[20px] flex-1 flex flex-col gap-[30px] justify-center w-full max-w-[861px] mx-auto">
+        <div>
+          <button
+            onClick={onClose}
+            className="md:hidden cursor-pointer"
+            aria-label="Close"
+          >
+            <ArrowLeft className="w-7 h-7" />
+          </button>
+          <div className="space-y-2">
+            <h2 className="font-light text-[32px] leading-[38px] tracking-[0%] text-off-black">
+              Welcome to Portrait AI
+            </h2>
+            <p className="font-light text-[20px] leading-[25.2px] tracking-[0%] text-off-black">
+              Watch this video to learn more
+            </p>
+          </div>
+        </div>
+
+        {/* Video */}
+        <div className="w-full h-[441px]">
+          <video
+            src="/videos/onboard-intro.webm"
+            poster="/icons/onboard-intro.png"
+            className="mx-auto w-full h-[60vh] bg-off-black rounded-md md:rounded-2xl lg:rounded-3xl object-contain"
+            controls
+          />
+        </div>
       </div>
     </div>
   );
