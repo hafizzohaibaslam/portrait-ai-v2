@@ -25,26 +25,33 @@ const USE_CASES = [
 const LandingUseCases = ({ className }: LandingUseCasesProps) => {
   return (
     <section
-      className={cn("mt-12 lg:mt-32 px-4 md:px-24 2xl:px-[170px]", className)}
+      className={cn(
+        "mt-[122px] px-5 w-full max-w-[1201px] mx-auto flex flex-col gap-[72px]",
+        className
+      )}
     >
-      <div className="mt-12 lg:mt-18 xl:grid grid-cols-3 gap-6">
+      <h1 className="text-center font-medium text-[32px] leading-[36px] tracking-[-3%] lg:text-[40px] lg:leading-[40px] lg:tracking-[-3%] text-off-black">
+        Most Popular Use Cases For Portrait AI
+      </h1>
+      <div className="grid lg:grid-cols-3 gap-10">
         {USE_CASES.map((useCase, index) => {
           const number = index + 1;
           return (
             <div
               key={index}
-              className="bg-purple-7 p-6 pt-3 xl:pt-5 xl:px-9 xl:py-10 mt-6 xl:mt-0 rounded-md"
+              className="bg-purple-7 py-10 px-9 rounded-[12px] space-y-6"
             >
-              {/* Numbered Badge */}
-              <div className="w-fit h-fit px-5 py-2 rounded-xl box-content bg-purple-6 flex items-center justify-center text-3xl font-semibold">
+              <span className="w-fit h-fit px-5 py-2 rounded-xl box-content bg-purple-6 flex items-center justify-center text-3xl font-semibold">
                 {number}
-              </div>
+              </span>
 
               {/* Title */}
-              <h3 className="mt-3 text-xl lg:text-3xl">{useCase.title}</h3>
+              <h3 className="font-normal text-[28px] leading-[34px] tracking-[0%] text-off-black">
+                {useCase.title}
+              </h3>
 
               {/* Description */}
-              <p className="mt-3 lg:mt-6 lg:text-xl font-light">
+              <p className="font-light text-[20px] leading-[29px] tracking-[0%] text-off-black">
                 {useCase.description}
               </p>
             </div>

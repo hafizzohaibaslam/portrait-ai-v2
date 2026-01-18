@@ -43,7 +43,7 @@ const LandingPreHero = ({ className }: LandingPreHeroProps) => {
   return (
     <section
       className={cn(
-        "mt-5 lg:mt-[98px] px-5 lg:px-[156px] lg:flex items-stretch",
+        "mt-5 lg:mt-[98px] px-5 w-full lg:flex max-w-[1201px] mx-auto",
         className
       )}
     >
@@ -98,7 +98,7 @@ const FeatureCard = ({
   return (
     <div
       className={cn(
-        "lg:sticky lg:top-26 px-6 py-8 lg:p-12 bg-purple-7 rounded-t-[8px] lg:rounded-t-[12px]",
+        "lg:sticky lg:top-26 px-6 py-8 lg:p-12 bg-purple-7 rounded-t-[8px] lg:rounded-t-[12px] space-y-[48px]",
         !isFirst && "mt-4"
       )}
     >
@@ -109,8 +109,14 @@ const FeatureCard = ({
         height={60}
         className="w-12 h-12 lg:w-[60px] lg:h-[60px]"
       />
-      <h3 className="mt-8 lg:mt-12 text-xl lg:text-2xl">{title}</h3>
-      <p className="mt-2 font-light lg:text-xl">{description}</p>
+      <div className="flex flex-col gap-[10px]">
+        <h3 className="font-normal text-[24px] leading-[28px] tracking-[0%] text-off-black">
+          {title}
+        </h3>
+        <p className="font-light text-[20px] leading-[28px] tracking-[0%] text-off-black">
+          {description}
+        </p>
+      </div>
     </div>
   );
 };
@@ -119,11 +125,11 @@ const FeatureCard = ({
 const CTACard = () => {
   return (
     <div className="mt-4 lg:sticky lg:top-26 flex-1 rounded-[8px] lg:rounded-b-[12px] px-6 py-8 lg:p-12 bg-yellow-2 flex flex-col justify-between">
-      <div>
-        <div className="uppercase text-xs lg:text-sm font-medium">
+      <div className="space-y-3">
+        <h1 className="uppercase font-medium text-[13px] leading-[17px] tracking-[.5px] text-off-black">
           portrait ai
-        </div>
-        <h2 className="mt-3 text-4xl lg:text-5xl">
+        </h1>
+        <h2 className="font-normal text-[48px] leading-[53px] tracking-[0] text-off-black">
           Let&apos;s preserve
           <br />
           your memories
@@ -133,13 +139,7 @@ const CTACard = () => {
       </div>
       <Link
         href="/auth/sign-up"
-        className={cn(
-          "w-fit mt-16 lg:mt-24",
-          "text-center px-12 py-2 lg:px-8 lg:py-3",
-          "border-[1.5px] border-off-black bg-off-black text-white",
-          "hover:bg-white hover:text-off-black",
-          "rounded-lg transition-ease"
-        )}
+        className={cn("mt-16 lg:mt-24 black-button max-w-[150px] px-4")}
       >
         Try for Free
       </Link>

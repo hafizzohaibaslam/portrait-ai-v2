@@ -9,30 +9,32 @@ const LandingHeaderTitle = ({ className }: LandingHeaderTitleProps) => {
   return (
     <div
       className={cn(
-        "pt-[90px] lg:pt-[148px] flex flex-col items-center text-center",
+        "flex-1 flex flex-col items-center justify-between text-center",
         className
       )}
     >
-      <h1 className="text-4xl lg:text-7xl font-medium">
-        Make{" "}
-        <span className="bg-linear-to-r from-yellow-1 via-purple-1 to-yellow-1 bg-clip-text text-transparent">
-          Life
-        </span>{" "}
-        Portraits
-      </h1>
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <h1 className="font-medium text-[40px] leading-[48px] tracking-[1.5%] lg:text-[80px] lg:leading-[72px] lg:tracking-[-3%] text-off-black">
+          Make{" "}
+          <span className="bg-linear-to-r from-[#FBBC05] via-[#8A38F5] to-[#FBBC05] bg-clip-text text-transparent">
+            Life
+          </span>{" "}
+          Portraits
+        </h1>
 
-      <p className="mt-3 lg:mt-8 lg:text-2xl font-light tracking-[-3%]">
-        Your partner in beautifully capturing one&apos;s soul.
-      </p>
+        <p className="mt-3 lg:mt-8 font-light text-[26px] leading-[28px] tracking-[-3%] text-black-005">
+          Your partner in beautifully capturing one&apos;s soul.
+        </p>
 
-      <Link
-        href="/auth/sign-up"
-        className="mt-8 lg:mt-10 text-center px-12 py-2 lg:px-8 lg:py-3 border-[1.5px] border-off-black bg-off-black text-white hover:bg-white hover:text-off-black rounded-lg transition-ease"
-      >
-        Try Portrait AI
-      </Link>
+        <Link
+          href="/auth/sign-up"
+          className="mt-8 lg:mt-10 black-button max-w-[200px]"
+        >
+          Try Portrait AI
+        </Link>
+      </div>
 
-      <p className="mt-16 lg:mt-[147px] font-medium text-2xl lg:text-4xl">
+      <p className="mb-4 font-medium text-[32px] leading-[36px] tracking-[-3%] lg:text-[40px] lg:leading-[40px] lg:tracking-[-3%] text-off-black">
         Life Story Archiving, Made Easy
       </p>
     </div>

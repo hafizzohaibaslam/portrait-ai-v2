@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import AppBrand from "@/components/shared/AppBrand";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import LandingMobileMenu from "@/components/landing-page/LandingMobileMenu";
 
@@ -12,26 +11,25 @@ type LandingHeaderProps = {
   className?: string;
 };
 
+const navLinks = [
+  { label: "Overview", href: "/" },
+  { label: "Contact Us", href: "/contact-us" },
+];
+
+const socialLinks = [
+  { name: "Instagram", href: "#", icon: "/images/icon-instagram.png" },
+  { name: "TikTok", href: "#", icon: "/images/icon-tiktok.png" },
+  { name: "X", href: "#", icon: "/images/icon-x.png" },
+];
+
 const LandingHeader = ({ className }: LandingHeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const navLinks = [
-    { label: "Overview", href: "/" },
-    { label: "Contact Us", href: "/contact-us" },
-  ];
-
-  const socialLinks = [
-    { name: "Instagram", href: "#", icon: "/images/icon-instagram.png" },
-    { name: "TikTok", href: "#", icon: "/images/icon-tiktok.png" },
-    { name: "X", href: "#", icon: "/images/icon-x.png" },
-  ];
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 bg-yellow-4 border-b-2 border-gray-1 lg:border-none",
-        "px-5 py-6 lg:px-12 lg:py-6",
-        "flex items-center justify-between",
+        "px-[22px] py-6",
+        "flex items-center justify-between gap-2 border-b border-gray-1 lg:border-none",
         className
       )}
     >
@@ -39,18 +37,22 @@ const LandingHeader = ({ className }: LandingHeaderProps) => {
       <AppBrand />
 
       {/* Desktop Navigation */}
-      <nav className="hidden lg:flex items-center gap-8">
+      <nav className="hidden lg:flex lg:items-center lg:gap-6">
         {/* Nav Links */}
         <div className="flex items-center gap-8">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="hover:underline">
+            <Link
+              key={link.href}
+              href={link.href}
+              className="font-normal text-[16px] leading-[20px] tracking-[3%] hover:underline text-off-black"
+            >
               {link.label}
             </Link>
           ))}
         </div>
 
         {/* Social Icons */}
-        <div className="flex items-center gap-5 ml-6">
+        <div className="flex items-center gap-4">
           {socialLinks.map((social) => (
             <Link key={social.name} href={social.href} aria-label={social.name}>
               <Image
@@ -65,13 +67,9 @@ const LandingHeader = ({ className }: LandingHeaderProps) => {
         </div>
 
         {/* CTA Button */}
-        <Button
-          asChild
-          variant="outline"
-          className="ml-8 border-off-black bg-yellow-4 hover:bg-off-black hover:text-white"
-        >
+        <button className="get-started-button">
           <Link href="/auth/sign-up">Get Started</Link>
-        </Button>
+        </button>
       </nav>
 
       {/* Mobile Hamburger Button */}

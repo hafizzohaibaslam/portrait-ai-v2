@@ -13,8 +13,13 @@ const HERO_IMAGES = [
 
 const LandingHero = ({ className }: LandingHeroProps) => {
   return (
-    <section className={cn("mt-16 lg:mt-[186px]", className)}>
-      <h2 className="text-2xl lg:text-4xl font-medium text-center max-w-[314px] lg:max-w-[580px] mx-auto">
+    <section
+      className={cn(
+        "mt-16 lg:mt-[120px] w-full max-w-[1106px] mx-auto space-y-[55px]",
+        className
+      )}
+    >
+      <h2 className="font-medium text-[36px] leading-[40px] tracking-[-3%] text-off-black w-full max-w-[707px] mx-auto text-center">
         Moments, Memories, & Highlights that richly capture a life story.
       </h2>
       <HeroSlideshow images={HERO_IMAGES} className="mt-8  lg:mt-14 w-full" />

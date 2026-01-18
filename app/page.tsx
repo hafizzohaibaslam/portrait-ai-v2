@@ -11,10 +11,12 @@ import LandingFooter from "@/components/landing-page/LandingFooter";
 export default function LandingPage() {
   return (
     <div className="bg-yellow-4 h-full flex flex-col">
-      <LandingHeader />
-      <LandingHeaderTitle />
-      <LandingUseCases />
+      <div className="h-screen flex flex-col">
+        <LandingHeader />
+        <LandingHeaderTitle />
+      </div>
       <LandingPreHero />
+      <LandingUseCases />
       <LandingSecuritySection />
       <LandingHero />
       <LandingGetInTouch />

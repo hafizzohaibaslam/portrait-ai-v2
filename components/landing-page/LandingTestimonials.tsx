@@ -51,13 +51,13 @@ const LandingTestimonials = ({ className }: LandingTestimonialsProps) => {
   }, []);
 
   return (
-    <section className={cn("mt-18 lg:mt-[170px]", className)}>
-      <h2 className="text-2xl lg:text-4xl font-medium text-center max-w-[314px] lg:max-w-[580px] mx-auto">
+    <section className={cn("mt-18 lg:mt-[96px] space-y-[37px]", className)}>
+      <h2 className="font-medium text-[36px] leading-[40px] tracking-[-3%] text-off-black text-center lg:text-[40px] lg:leading-[40px] lg:tracking-[-3%]">
         What users say about us
       </h2>
 
       {ready && (
-        <Marquee className="mt-8 lg:mt-20 z-0" pauseOnHover autoFill>
+        <Marquee className="z-0" pauseOnHover autoFill>
           {TESTIMONIALS.map((testimonial, index) => (
             <TestimonialCard
               key={index}
@@ -83,17 +83,17 @@ const TestimonialCard = ({ testimonial, className }: TestimonialCardProps) => {
   return (
     <div
       className={cn(
-        "px-5 py-6 rounded-md lg:rounded-lg bg-purple-7 lg:text-xl flex flex-col justify-between w-[400px] min-h-[240px] lg:min-h-[370px]",
+        "px-6 py-6 rounded-[16px] bg-purple-7 lg:text-xl flex flex-col gap-[50px] justify-between w-[400px] min-h-[240px] lg:min-h-[370px]",
         className
       )}
     >
       {/* Testimonial Text */}
-      <p className="font-light line-clamp-5 lg:line-clamp-7">
+      <p className="font-light text-[20px] leading-[30px] tracking-[0%] text-off-black">
         {testimonial.text}
       </p>
 
       {/* User Info */}
-      <div className="flex items-center mt-auto">
+      <div className="flex items-center gap-4 mt-auto">
         <Image
           src={testimonial.user.picture}
           alt={testimonial.user.name}
@@ -101,7 +101,9 @@ const TestimonialCard = ({ testimonial, className }: TestimonialCardProps) => {
           height={56}
           className="w-14 h-14 rounded-full object-cover object-center"
         />
-        <div className="pl-4">{testimonial.user.name}</div>
+        <div className="font-normal text-[20px] leading-[27px] tracking-[0%] text-off-black">
+          {testimonial.user.name}
+        </div>
       </div>
     </div>
   );

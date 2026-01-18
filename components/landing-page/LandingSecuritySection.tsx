@@ -44,7 +44,7 @@ const LandingSecuritySection = ({ className }: LandingSecuritySectionProps) => {
       ref={containerRef}
       style={{ minHeight: layout.containerMinHeight }}
       className={cn(
-        "z-1 mt-20 lg:mt-40 relative bg-yellow-3 py-16 flex flex-col justify-end overflow-hidden",
+        "z-1 mt-[90px] lg:mt-[120px] relative bg-yellow-3 py-16 flex flex-col justify-end overflow-hidden",
         className
       )}
     >
@@ -131,36 +131,35 @@ const CircularImageArrangement = ({
 // Content Section Component
 const SecurityContent = () => {
   return (
-    <div className="relative flex flex-col items-center text-center px-5 max-w-[690px] mx-auto">
+    <div className="relative flex flex-col gap-9 items-center text-center px-5 max-w-[700px] mx-auto">
       <Image
         src="/images/icon-padlock-aws.png"
         alt="Security"
-        width={86}
-        height={86}
-        className="w-16 h-16 lg:w-[86px] lg:h-[86px]"
+        width={96}
+        height={96}
+        className="w-16 h-16 lg:w-[96px] lg:h-[96px]"
       />
 
-      <h2 className="mt-6 lg:mt-9 text-2xl lg:text-4xl font-medium text-center">
-        We value your privacy and store all memories securely.
-      </h2>
+      <div className="space-y-4">
+        <h2 className="font-medium text-[36px] leading-[40px] tracking-[-3%] text-off-black">
+          We value your privacy and store all memories securely.
+        </h2>
 
-      <p className="mt-4 lg:text-2xl text-black-004">
-        Our{" "}
-        <Link href="#" className="underline inline">
-          partnership
-        </Link>{" "}
-        with AWS security enables us keep your data safe and inaccessible to
-        uninvited parties.
-      </p>
+        <p className="font-light text-[24px] leading-[28px] tracking-[-3%] text-off-black">
+          Our{" "}
+          <Link href="#" className="underline inline">
+            partnership
+          </Link>{" "}
+          with AWS security enables us keep your data safe and inaccessible to
+          uninvited parties.
+        </p>
+      </div>
 
       <Link
         href="/auth/sign-up"
         className={cn(
-          "mt-14 lg:mt-9 px-16!",
-          "text-center px-12 py-2 lg:px-8 lg:py-3",
-          "border-[1.5px] border-dominant-purple-main bg-dominant-purple-main text-white",
-          "hover:bg-white hover:text-dominant-purple-main",
-          "rounded-lg transition-ease"
+          "p-[7px] rounded-[8px] bg-dominant-purple-main text-white hover:bg-transparent hover:text-dominant-purple-main border border-transparent hover:border-dominant-purple-main transition-all duration-200 cursor-pointer",
+          "font-medium text-[18px] leading-[32px] tracking-[-3%] text-center w-full max-w-[200px]"
         )}
       >
         Get Started
