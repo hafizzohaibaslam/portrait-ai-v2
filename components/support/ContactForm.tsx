@@ -50,11 +50,11 @@ const ContactForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-purple-7 rounded-md p-8 flex-1 lg:flex flex-col justify-between"
+      className="bg-purple-7 rounded-[12px] p-8 flex-1 flex flex-col gap-6"
     >
-      <div>
-        <div className="font-medium text-xl">Send us a Message</div>
-        <div className="mt-6 space-y-4">
+        <h1 className="font-medium text-[20px] leading-[24px] tracking-[-1.08px] text-off-black">Send us a Message</h1>
+      
+        <div className="space-y-6">
           <FormInput
             label="Name"
             value={formData.name}
@@ -81,20 +81,21 @@ const ContactForm = () => {
             value={formData.message}
             onChange={(value) => handleChange("message", value)}
             variant="white"
-            className="min-h-[120px]"
+            className="min-h-[120px] h-auto"
             required
           />
-        </div>
-      </div>
+      
+      
       <ThemedButton
         type="submit"
         variant="purple"
-        className="mt-5"
+        className="w-full"
         disabled={!isValid}
         loading={isSubmitting}
       >
         Send Message
       </ThemedButton>
+        </div>
     </form>
   );
 };

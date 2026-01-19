@@ -21,7 +21,7 @@ export default function LandingPage() {
       <LandingHero />
       <LandingGetInTouch />
       <LandingTestimonials />
-      <LandingFooter />
+      <LandingFooter className="w-full max-w-[1196px] mx-auto mt-18 mb-14"/>
     </div>
   );
 }

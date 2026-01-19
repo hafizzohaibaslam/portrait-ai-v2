@@ -14,7 +14,7 @@ export function proxy(request: NextRequest) {
 
   if (isAuthRoute && hasAuthCookie) {
     const url = request.nextUrl.clone();
-    url.pathname = "/home";
+    url.pathname = "/dashboard/portraits";
     return NextResponse.redirect(url);
   }
 

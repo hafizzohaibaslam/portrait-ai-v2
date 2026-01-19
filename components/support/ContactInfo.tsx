@@ -1,5 +1,5 @@
 "use client";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/contact-info";
 import { cn } from "@/lib/utils";
 
@@ -17,13 +17,13 @@ const ContactInfoItem = ({
   className,
 }: ContactInfoItemProps) => {
   return (
-    <div className={cn("flex", className)}>
-      <div className="mr-4 p-3 rounded-md bg-purple-7 w-fit h-fit shrink-0">
+    <div className={cn("flex gap-4 items-center", className)}>
+      <div className="p-3 rounded-[8px] bg-purple-7 flex items-center justify-center w-[48px] h-[48px] shrink-0">
         {icon}
       </div>
-      <div>
-        <div className="font-medium">{title}</div>
-        <div className="mt-1 font-light text-gray-5">{children}</div>
+      <div className="space-y-1">
+        <h1 className="font-medium text-[16px] leading-[24px] tracking-0 text-off-black">{title}</h1>
+        <span className="font-light text-[16px] leading-[24px] tracking-0 text-black-005">{children}</span>
       </div>
     </div>
   );
@@ -31,15 +31,15 @@ const ContactInfoItem = ({
 
 const ContactInfo = () => {
   return (
-    <div className="flex-1 lg:flex flex-col justify-between">
-      <div>
-        <div className="font-medium text-xl">Contact Information</div>
-        <p className="mt-2 font-light text-gray-5">
+    <div className="flex-1 flex flex-col gap-8">
+      <div className="space-y-3">
+        <h1 className="font-medium text-[20px] leading-[24px] tracking-[-1.08px] text-off-black">Contact Information</h1>
+        <p className="font-light text-[16px] leading-[24px] tracking-[-0.6px] text-black-005">
           Feel free to reach out to us through any of the following methods.
           We&apos;re here to help you preserve your precious memories.
         </p>
       </div>
-      <div className="mt-4 space-y-8">
+      <div className="space-y-6">
         <ContactInfoItem
           icon={<Mail className="w-6 h-6 stroke-dominant-purple-main" />}
           title="Email"
@@ -67,16 +67,12 @@ const ContactInfo = () => {
           ))}
         </ContactInfoItem>
       </div>
-
-      <ContactInfoItem
-        icon={<Clock className="w-6 h-6 stroke-dominant-purple-main" />}
-        title="Active Hours"
-        className="mt-4 bg-yellow-3 p-6 rounded-md"
-      >
-        <div>{CONTACT_INFO.hours.weekdays}</div>
-        <div>{CONTACT_INFO.hours.saturday}</div>
-        <div>{CONTACT_INFO.hours.sunday}</div>
-      </ContactInfoItem>
+       <div className="p-6 rounded-[12px] bg-yellow-3 space-y-2">
+<h1 className="font-medium text-[16px] leading-[24px] tracking-0 text-off-black">Active Hours</h1>
+   <p className="font-light text-[16px] leading-[24px] tracking-0 text-black-005">{CONTACT_INFO.hours.weekdays}</p>
+        <p className="font-light text-[16px] leading-[24px] tracking-0 text-black-005">{CONTACT_INFO.hours.saturday}</p>
+        <p className="font-light text-[16px] leading-[24px] tracking-0 text-black-005">{CONTACT_INFO.hours.sunday}</p>
+      </div>
     </div>
   );
 };
