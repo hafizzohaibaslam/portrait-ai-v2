@@ -16,31 +16,22 @@ type PortraitHeroProps = {
 const PortraitHero = ({ portrait, className }: PortraitHeroProps) => {
   const { user } = useAuthContext();
   return (
-    <div className={cn("", className)}>
-      {/* Main Card */}
-      <div className="bg-accent-purple-001 rounded-3xl p-6 lg:p-10 shadow-sm border border-purple-50">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-          {/* Portrait Image - Left Side */}
+    <div className={cn("flex flex-col gap-8", className)}>
+      <div className="bg-accent-purple-001 p-12 rounded-[20px] flex flex-col gap-11 lg:flex-row lg:justify-between">
           <PortraitHeroImage
             imageUrl={portrait.image_url}
             fallbackImageUrl={user?.profile_image_url || undefined}
             alt={portrait.name}
           />
 
-          {/* Content - Right Side */}
-          <div className="flex-1 flex flex-col justify-between">
-            <div className="pt-4">
-              {/* Top Links */}
+          
+          <div className="flex-1 flex flex-col gap-[22px] justify-between">
               <PortraitHeroActions
                 onShare={() => {}}
                 onPrivacySettings={() => {}}
               />
-
-              {/* Name */}
               <PortraitHeroInfo portrait={portrait} />
-            </div>
-
-            {/* Action Cards Grid */}
+            
             <PortraitActionCards
               onCreateHighlights={() => {}}
               onModifyImage={() => {}}
@@ -48,7 +39,6 @@ const PortraitHero = ({ portrait, className }: PortraitHeroProps) => {
               onAskGenie={() => {}}
             />
           </div>
-        </div>
       </div>
       <PortraitTimelineBanner />
     </div>

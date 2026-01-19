@@ -15,17 +15,17 @@ const PortraitHeroActions = ({
   className,
 }: PortraitHeroActionsProps) => {
   return (
-    <div className={cn("flex flex-wrap gap-6 mb-4", className)}>
+    <div className={cn("flex flex-wrap gap-6", className)}>
       <button
         onClick={onShare}
-        className="flex items-center gap-2 text-dominant-purple-main hover:underline text-sm font-medium"
+        className="flex items-center gap-2 text-dominant-purple-main hover:underline font-normal text-[18px] leading-[23px] tracking-[.27px]"
       >
         <Users size={18} />
         <span>Share Portrait</span>
       </button>
       <button
         onClick={onPrivacySettings}
-        className="flex items-center gap-2 text-dominant-purple-main hover:underline text-sm font-medium"
+        className="flex items-center gap-2 text-dominant-purple-main hover:underline font-normal text-[18px] leading-[23px] tracking-[.27px]"
       >
         <Settings size={18} />
         <span>Privacy Settings</span>

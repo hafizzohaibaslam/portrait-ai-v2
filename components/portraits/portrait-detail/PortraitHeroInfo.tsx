@@ -10,12 +10,12 @@ type PortraitHeroInfoProps = {
 
 const PortraitHeroInfo = ({ portrait, className }: PortraitHeroInfoProps) => {
   return (
-    <div className={cn("", className)}>
-      <h1 className="text-4xl lg:text-5xl font-bold text-off-black mb-8">
+    <div className={cn("flex flex-col gap-4", className)}>
+      <h1 className="font-semibold text-[48px] leading-[58px] text-off-black">
         {portrait.name || "Your Portrait"}
       </h1>
       {portrait.description && (
-        <p className="text-lg text-gray-6">{portrait.description}</p>
+        <p className="font-normal text-[18px] leading-[23px] tracking-[.27px] text-off-gray">{portrait.description}</p>
       )}
     </div>
   );

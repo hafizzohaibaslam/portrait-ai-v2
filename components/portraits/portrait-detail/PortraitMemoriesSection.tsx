@@ -1,11 +1,11 @@
 "use client";
-
 import { useState } from "react";
 import type { Portrait } from "@/types/portrait-types";
 import type { Memory } from "@/types/memory-types";
 import PortraitMemoriesHeader from "./PortraitMemoriesHeader";
 import PortraitMemoriesGrid from "./PortraitMemoriesGrid";
 import PortraitMemoriesFooter from "./PortraitMemoriesFooter";
+import MemoryDetailDialog from "@/components/memories/MemoryDetailDialog";
 import { cn } from "@/lib/utils";
 
 type PortraitMemoriesSectionProps = {
@@ -21,13 +21,16 @@ const PortraitMemoriesSection = ({
   isLoading,
   className,
 }: PortraitMemoriesSectionProps) => {
-  const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
-  const [memoryDialogOpen, setMemoryDialogOpen] = useState(false);
+  const [selectedMemoryId, setSelectedMemoryId] = useState<string | null>(null);
+  const selectedMemory = memories?.find(m => m.memory_id === selectedMemoryId) || null;
 
-  const handleMemoryClick = (memory: Memory) => {
-    setSelectedMemory(memory);
-    setMemoryDialogOpen(true);
+  const handleMemoryClick = (memory: Memory | null) => {
+    setSelectedMemoryId(memory?.memory_id || null);
   };
+
+  const relatedMemories = memories?.filter(
+    (m) => m.memory_id !== selectedMemory?.memory_id
+  ) || [];
 
   return (
     <div className={cn("", className)}>
@@ -39,7 +42,14 @@ const PortraitMemoriesSection = ({
         onMemoryClick={handleMemoryClick}
       />
       {memories && memories.length > 0 && <PortraitMemoriesFooter />}
-      {/* TODO: Add MemoryDetailDialog */}
+      
+      <MemoryDetailDialog
+        open={selectedMemoryId !== null}
+        onOpenChange={(memory: Memory | null) => setSelectedMemoryId(memory?.memory_id || null)}
+        memory={selectedMemory}
+        relatedMemories={relatedMemories}
+        
+      />
     </div>
   );
 };

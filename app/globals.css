@@ -63,6 +63,7 @@
   --color-purple-02: #e9d4ff;
   --color-purple-03: #e8d5eb;
   --color-purple-04: #f8f4f9;
+  --color-purple-05: #DAB2FF;
 
   --color-red-1: #d4183d;
   --color-red-2: #ffe2e2;
@@ -76,7 +77,27 @@
   --color-yellow-5: #ce8100;
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
 @layer utilities {
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      #f0f0f0 0%,
+      #f5f5f5 50%,
+      #f0f0f0 100%
+    );
+    background-size: 2000px 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
   .scrollbar-hidden {
     scrollbar-width: none;
     /* Firefox */

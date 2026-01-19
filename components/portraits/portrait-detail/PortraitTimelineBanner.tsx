@@ -1,42 +1,25 @@
 "use client";
-
 import { Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-type PortraitTimelineBannerProps = {
-  className?: string;
-};
-
-const PortraitTimelineBanner = ({ className }: PortraitTimelineBannerProps) => {
+const PortraitTimelineBanner = () => {
   return (
-    <>
-      {/* Interactive Timeline Banner */}
-      <div
-        className={cn(
-          "mt-8 bg-accent-purple-001 rounded-2xl p-4 lg:p-6 flex items-center justify-between border border-purple-50",
-          className
-        )}
-      >
+    <div className="w-full bg-accent-purple-001 rounded-[16px] p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-dominant-purple-main flex items-center justify-center shrink-0">
-            <Sparkles className="stroke-white w-6 h-6" />
+          <div className="w-14 h-14 p-[14px] rounded-[12px] bg-dominant-purple-main flex items-center justify-center shrink-0">
+            <Sparkles className="stroke-white w-7 h-7" />
           </div>
-          <div>
-            <div className="font-bold text-off-black">Interactive Timeline</div>
-            <div className="text-sm text-black-004 font-light mt-1 hidden sm:block">
+          <div className="space-y-[6px]">
+            <h1 className="font-medium text-[20px] leading-[24px] tracking-0 text-off-black">Interactive Timeline</h1>
+            <p className="font-normal text-[16px] leading-[20px] tracking-0 text-black-005">
               Portrait AI helps you capture special moments at various life
               intervals.
-            </div>
+            </p>
           </div>
         </div>
-        <div className="px-4 py-1.5 bg-dominant-purple-main text-white text-xs font-medium rounded-full shrink-0">
+        <div className="w-fit py-[10px] px-[12px] rounded-[24px] bg-linear-to-r from-dominant-purple-main to-dominant-purple font-normal text-[14px] leading-[16px] tracking-[1.5%] text-white shrink-0">
           Coming Soon
         </div>
-      </div>
-      <div className="sm:hidden text-xs text-black-004 font-light mt-2 px-1">
-        Portrait AI helps you capture special moments at various life intervals.
-      </div>
-    </>
+    </div>
   );
 };
 

@@ -23,21 +23,24 @@ const PortraitActionCard = ({
     <div
       onClick={onClick}
       className={cn(
-        "bg-white p-5 rounded-2xl text-left border-2 border-white hover:border-dominant-purple-main cursor-pointer shadow-sm hover:shadow-md transition-ease",
+        "bg-white p-5 rounded-[16px] cursor-pointer shadow flex flex-col gap-3",
         className
       )}
     >
       <div
         className={cn(
-          "w-10 h-10 rounded-lg flex items-center justify-center",
+          "w-12 h-12 p-3 rounded-[12px] flex items-center justify-center",
           iconBgColor,
-          "[&>svg]:w-5 [&>svg]:h-5 [&>svg]:stroke-dominant-purple-main"
+          "[&>svg]:w-6 [&>svg]:h-6 [&>svg]:stroke-dominant-purple-main"
         )}
       >
         {icon}
       </div>
-      <div className="mt-4 font-bold text-lg text-off-black">{title}</div>
-      <div className="mt-1 text-sm text-gray-500 font-light">{description}</div>
+      <div className="space-y-1">
+
+      <h3 className="font-medium text-[18px] leading-[24px] tracking-0 text-off-black">{title}</h3>
+      <p className="font-normal text-[14px] leading-[20px] tracking-0 text-gray-11">{description}</p>
+      </div>
     </div>
   );
 };

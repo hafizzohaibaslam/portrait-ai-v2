@@ -19,7 +19,7 @@ const PortraitHeroImage = ({
   const displayImage = imageUrl || fallbackImageUrl;
 
   return (
-    <div className={cn("shrink-0 w-full lg:w-[400px]", className)}>
+    <div className={cn("shrink-0 w-full lg:max-w-[513px] h-auto", className)}>
       <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-md bg-gray-200 min-h-[300px] lg:min-h-[400px]">
         {displayImage ? (
           <Image

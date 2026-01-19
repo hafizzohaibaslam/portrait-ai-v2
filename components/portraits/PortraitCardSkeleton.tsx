@@ -9,9 +9,12 @@ type PortraitCardSkeletonProps = {
 
 const PortraitCardSkeleton = ({ className }: PortraitCardSkeletonProps) => {
   return (
-    <PortraitCardWrapper className={cn("animate-pulse", className)}>
-      <div className="h-[180px] rounded-md bg-gray-2" />
-      <div className="mt-3 h-5 w-3/4 bg-gray-2 rounded" />
+    <PortraitCardWrapper className={cn("", className)}>
+      {/* Image skeleton - matches PortraitCard h-[172px] with rounded-[4px] */}
+      <div className="h-[172px] w-full rounded-[4px] overflow-hidden shimmer" />
+      
+      {/* Name skeleton - matches PortraitCard text height (text-[18px] leading-[20px]) */}
+      <div className="h-5 w-3/4 shimmer rounded-sm" />
     </PortraitCardWrapper>
   );
 };
