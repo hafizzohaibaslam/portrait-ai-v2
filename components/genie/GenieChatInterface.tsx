@@ -154,11 +154,16 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
   const handleSendMessage = async (message: string) => {
     if (!message.trim() && fileUpload.files.length === 0) return;
 
-    // Convert uploaded files to attachments
+    // Convert uploaded files to attachments BEFORE clearing
     const attachments =
       fileUpload.files.length > 0
         ? filesToAttachments(fileUpload.files)
         : undefined;
+
+    // Hide upload UI and clear files immediately when sending message
+    // This prevents showing upload UI with files while waiting for API response
+    fileUpload.hideUpload();
+    fileUpload.clearFiles();
 
     if (conversationId) {
       await continueConversation(message, attachments);
@@ -166,8 +171,6 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
       await startConversation(message, attachments);
     }
 
-    // Clear uploaded files after sending
-    fileUpload.clearFiles();
     setSelectedMemoryType(null);
   };
 
@@ -200,6 +203,9 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
 
   return (
     <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto">
+
+      
       {/* Progress Indicator */}
       {Object.keys(collectedData).length > 0 && (
         <GenieProgressIndicator
@@ -260,7 +266,10 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
       )}
 
       {/* File Upload Component - Below messages, above input */}
+      {/* Show if visible AND (files exist OR not loading) */}
+      {/* This prevents showing empty upload UI after sending a message while loading */}
       {fileUpload.isVisible &&
+        (fileUpload.files.length > 0 || !isLoading) &&
         (selectedMemoryType === "media" || selectedMemoryType === null) && (
           <div className="mt-4 mb-4">
             <GenieFileUpload
@@ -306,6 +315,7 @@ const GenieChatInterface = ({ onActionComplete }: GenieChatInterfaceProps) => {
         isActive={fileUpload.isDragActive}
         hintLabel={fileUpload.hintLabel}
       />
+      </div>
 
       {/* Chat Input */}
       <GenieChatInput

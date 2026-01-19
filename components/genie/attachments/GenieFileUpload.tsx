@@ -6,9 +6,11 @@ import {
   Video,
   Music,
   FileText,
-  X,
+  Trash2,
+  Play,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import DashedBorderWrapper from "@/components/shared/DashedBorderWrapper";
 import type { GenieHint } from "@/types/genie";
 import { GENIE_FILE_LIMITS } from "@/utils/genie/constants";
 import { getMediaTypeFromFile } from "@/utils/genie/media-helpers";
@@ -90,19 +92,35 @@ const GenieFileUpload = ({
     const mediaType = getMediaTypeFromFile(file);
     switch (mediaType) {
       case "image":
-        return <ImageIcon className="w-6 h-6 text-gray-400" />;
+        return <ImageIcon className="w-8 h-8 text-dominant-purple-main" />;
       case "video":
-        return <Video className="w-6 h-6 text-gray-400" />;
+        return <Video className="w-8 h-8 text-dominant-purple-main" />;
       case "audio":
-        return <Music className="w-6 h-6 text-gray-400" />;
+        return <Music className="w-8 h-8 text-dominant-purple-main" />;
       default:
-        return <FileText className="w-6 h-6 text-gray-400" />;
+        return <FileText className="w-8 h-8 text-dominant-purple-main" />;
     }
   };
 
   const getFileTypeLabel = (file: File) => {
     const mediaType = getMediaTypeFromFile(file);
-    return mediaType.charAt(0).toUpperCase() + mediaType.slice(1);
+    const labels: Record<string, string> = {
+      image: "Image",
+      video: "Video",
+      audio: "Audio",
+      document: "Doc",
+    };
+    return labels[mediaType] || "Doc";
+  };
+
+  const formatFileSize = (bytes: number): string => {
+    const mb = bytes / 1024 / 1024;
+    return `${mb.toFixed(2)} MB`;
+  };
+
+  const truncateFileName = (name: string, maxLength: number = 20) => {
+    if (name.length <= maxLength) return name;
+    return name.substring(0, maxLength) + "...";
   };
 
   // Don't render if no hint
@@ -118,170 +136,162 @@ const GenieFileUpload = ({
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <div className="flex flex-col lg:flex-row gap-6 h-full">
+      <div className={cn(
+        files.length > 0 && "flex flex-col lg:flex-row gap-4 items-stretch"
+      )}>
         {/* Drag & Drop Area */}
-        <div className="flex-1">
+        <DashedBorderWrapper
+          divProps={{
+            onClick: () => {
+              const input = document.createElement("input");
+              input.type = "file";
+              input.multiple = true;
+              input.accept = getAcceptString();
+              input.onchange = (e) => {
+                const target = e.target as HTMLInputElement;
+                if (target.files) {
+                  onFilesSelect(Array.from(target.files));
+                }
+              };
+              input.click();
+            },
+            onDragEnter: onDragEnter,
+            onDragLeave: onDragLeave,
+            onDragOver: onDragOver,
+            onDrop: onDrop,
+          }}
+          className={cn(
+            files.length > 0 ? "lg:max-w-[250px] w-full" : "",
+            "flex flex-col items-center justify-center cursor-pointer"
+          )}
+        >
+          <input
+            type="file"
+            className="hidden"
+            multiple
+            accept={getAcceptString()}
+            onChange={handleFileSelect}
+          />
           <div
             className={cn(
-              "relative border-2 border-dashed rounded-xl p-8 md:p-12",
-              "flex flex-col items-center justify-center gap-4",
-              "transition-colors cursor-pointer bg-white min-h-[200px]",
-              isDragActive
-                ? "border-purple-600 bg-purple-50"
-                : "border-purple-600 hover:border-purple-700 hover:bg-purple-50/30"
+              files.length > 0 ? "p-5" : "px-8 py-12",
+              "flex flex-col gap-8 items-center justify-center text-center w-full max-w-[466px]"
             )}
           >
-            <input
-              type="file"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              multiple
-              accept={getAcceptString()}
-              onChange={handleFileSelect}
-            />
-
-            <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center">
-              <Upload className="w-8 h-8 text-purple-600" />
+            <div className="flex flex-col items-center gap-8">
+              <div className="bg-accent-purple-001 rounded-full p-4 w-[56px] h-[56px] flex items-center justify-center">
+                <Upload className="stroke-dominant-purple-main w-[24px] h-[24px]" />
+              </div>
+              <h1 className="font-light text-[16px] leading-[24px] tracking-[3%] text-dominant-purple-main">
+                Drag & drop or Choose a file to upload
+              </h1>
             </div>
-
-            <div className="text-center">
-              <span className="text-base text-gray-700">
-                Drag & drop or{" "}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const input = document.createElement("input");
-                    input.type = "file";
-                    input.multiple = true;
-                    input.accept = getAcceptString();
-                    input.onchange = (e) => {
-                      const target = e.target as HTMLInputElement;
-                      if (target.files) {
-                        onFilesSelect(Array.from(target.files));
-                      }
-                    };
-                    input.click();
-                  }}
-                  className="text-purple-600 hover:text-purple-700 font-medium underline"
-                >
-                  Choose a file
-                </button>{" "}
-                to upload
-              </span>
-            </div>
+            {files.length === 0 && (
+              <p className="font-normal text-[14px] leading-[24px] tracking-[3%] text-black-003">
+                Supported file types: Images (e.g. PNG & JPEG), Videos (e.g MOV &
+                MP4), Audio (e.g. MP3) and Documents (e.g. PDF & DOCX)
+              </p>
+            )}
           </div>
-        </div>
+        </DashedBorderWrapper>
 
         {/* Media Grid Preview */}
         {files.length > 0 && (
-          <div className="lg:w-80 lg:flex-1 shrink-0 flex flex-col">
-            <div className="text-sm font-semibold text-gray-900 mb-3">
-              Selected Media ({files.length})
-            </div>
-            <div className="grid grid-cols-2 gap-3 flex-1 overflow-y-auto">
-              {files.map((file, index) => {
-                const previewUrl = previewUrls.get(index);
-                const mediaType = getMediaTypeFromFile(file);
-                const isImage = mediaType === "image";
-                const isVideo = mediaType === "video";
+          <div className="flex-1 grid gap-x-3 gap-y-3 grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {files.map((file, index) => {
+              const previewUrl = previewUrls.get(index);
+              const mediaType = getMediaTypeFromFile(file);
+              const isImage = mediaType === "image";
+              const isVideo = mediaType === "video";
 
-                return (
-                  <div
-                    key={`${file.name}-${index}-${file.size}`}
-                    className="relative group bg-gray-100 rounded-lg overflow-hidden aspect-square border border-gray-200"
-                  >
-                    {/* Image Preview */}
-                    {isImage && previewUrl && (
-                      <>
-                        {previewUrl.startsWith("blob:") ? (
-                          <Image
-                            fill
-                            src={previewUrl}
-                            alt={file.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <Image
-                            src={previewUrl}
-                            alt={file.name}
-                            fill
-                            className="object-cover"
-                          />
-                        )}
-                      </>
-                    )}
-
-                    {/* Video Preview */}
-                    {isVideo && previewUrl && (
-                      <div className="relative w-full h-full">
-                        <video
-                          src={previewUrl}
-                          className="w-full h-full object-cover"
-                          muted
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
-                          <Video className="w-6 h-6 text-white" />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Icon for non-visual files */}
-                    {!isImage && !isVideo && (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-2">
-                        {getFileIcon(file)}
-                        <div className="text-xs text-gray-600 mt-1 text-center line-clamp-1">
-                          {file.name}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Type Badge */}
-                    <div className="absolute top-1 left-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded backdrop-blur-sm">
-                      {getFileTypeLabel(file)}
-                    </div>
-
-                    {/* Remove Button */}
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRemove(index);
-                      }}
-                      className="absolute top-1 right-1 p-1 bg-red-500 hover:bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      aria-label="Remove file"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
+              return (
+                <div
+                  key={`${file.name}-${index}-${file.size}`}
+                  className="relative border border-gray-4 bg-[#EFE1EF] rounded-[12px] overflow-hidden group aspect-square shadow"
+                >
+                  {/* File type label */}
+                  <div className="absolute top-2 left-2 z-10 backdrop-blur-sm px-[6px] py-1 rounded-[12px] bg-[#0A01047A] font-normal text-[10px] leading-[100%] tracking-[-3%] text-white">
+                    {getFileTypeLabel(file)}
                   </div>
-                );
-              })}
-            </div>
 
-            {/* Upload Media Button - Bottom right */}
-            <div className="mt-4 flex justify-end">
-              <button
-                type="button"
-                onClick={() => {
-                  const input = document.createElement("input");
-                  input.type = "file";
-                  input.multiple = true;
-                  input.accept = getAcceptString();
-                  input.onchange = (e) => {
-                    const target = e.target as HTMLInputElement;
-                    if (target.files) {
-                      onFilesSelect(Array.from(target.files));
-                    }
-                  };
-                  input.click();
-                }}
-                className="px-4 py-[13px] font-normal text-[16px] leading-[140%] text-dominant-purple-main rounded-[24px] transition-colors border border-[#EFE1EF] cursor-pointer hover:bg-dominant-purple-main hover:text-white"
-              >
-                Upload Media
-              </button>
-            </div>
+                  {/* Preview content */}
+                  {isImage && previewUrl ? (
+                    <Image
+                      src={previewUrl}
+                      alt={file.name}
+                      fill
+                      className="w-full h-full object-cover"
+                    />
+                  ) : isVideo && previewUrl ? (
+                    <div className="relative w-full h-full">
+                      <video
+                        src={previewUrl}
+                        className="w-full h-full object-cover"
+                        muted
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <div className="bg-white/90 rounded-full p-3">
+                          <Play className="w-6 h-6 text-dominant-purple-main fill-dominant-purple-main" />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center p-4 bg-[#EFE1EF]">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="bg-accent-purple-001 p-4 rounded-lg">
+                          {getFileIcon(file)}
+                        </div>
+                        <div className="text-center w-full px-2 space-y-1">
+                          <h3 className="font-normal text-[12px] leading-[100%] tracking-[3%] text-dominant-purple-main overflow-hidden text-ellipsis line-clamp-2">
+                            {truncateFileName(file.name)}
+                          </h3>
+                          <span className="font-normal text-[10px] leading-[100%] tracking-[3%] text-dominant-purple-main">
+                            {formatFileSize(file.size)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Remove button */}
+                  <button
+                    onClick={() => onRemove(index)}
+                    className="absolute bottom-2 p-[10px] -translate-x-1/2 left-1/2 right-1/2 rounded-full border border-white w-fit bg-[#0A01047A] backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                    type="button"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
+
+      {/* Upload Media Button - Bottom right */}
+      {files.length > 0 && (
+        <div className="mt-4 flex justify-end">
+          <button
+            type="button"
+            onClick={() => {
+              const input = document.createElement("input");
+              input.type = "file";
+              input.multiple = true;
+              input.accept = getAcceptString();
+              input.onchange = (e) => {
+                const target = e.target as HTMLInputElement;
+                if (target.files) {
+                  onFilesSelect(Array.from(target.files));
+                }
+              };
+              input.click();
+            }}
+            className="px-4 py-[13px] font-normal text-[16px] leading-[140%] text-dominant-purple-main rounded-[24px] transition-colors border border-[#EFE1EF] cursor-pointer hover:bg-dominant-purple-main hover:text-white"
+          >
+            Upload Media
+          </button>
+        </div>
+      )}
     </div>
   );
 };
