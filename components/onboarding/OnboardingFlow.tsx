@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import StepPortraitForm from "./steps/StepPortraitForm";
 import StepPortraitImage from "./steps/StepPortraitImage";
 import StepProfileImage from "./steps/StepProfileImage";
-import StepAddMemories from "@/components/portraits/create-portrait-steps/StepAddMemories";
+import OnboardMemoriesDialog from "@/components/portraits/OnboardMemoriesDialog";
 import { useOnboardingFlow } from "@/hooks/onboarding/useOnboardingFlow";
 import { useCreatePortraitMutation } from "@/hooks/onboarding/useCreatePortraitMutation";
 import { useCreateMemoryMutation } from "@/hooks/onboarding/useCreateMemoryMutation";
@@ -165,11 +165,30 @@ const OnboardingFlow = ({ className }: OnboardingFlowProps) => {
           return null;
         }
         return (
-          <div className="flex-1 flex flex-col w-full max-w-[580px] mx-auto justify-center">
-            <StepAddMemories
-              portrait={state.portrait}
-              onNext={skipToDashboard}
-            />
+          <div className="flex-1 flex flex-col w-full max-w-[500px] mx-auto justify-center">
+            <div className="space-y-6">
+              <div className="space-y-1">
+                <h1 className="font-normal text-[32px] leading-[40px] tracking-[-3%] text-off-black">
+                  Add memories to your portrait
+                </h1>
+                <p className="font-light text-[18px] leading-[28px] tracking-[-3%] text-off-gray">
+                  Enrich this portrait with images, videos, and more. You can come back to add more later or share with others to contribute.
+                </p>
+              </div>
+              <div className="space-y-6">
+                <OnboardMemoriesDialog
+                  portrait={state.portrait}
+                  onComplete={skipToDashboard}
+                />
+                <button
+                  onClick={skipToDashboard}
+                  className="block text-[16px] font-normal leading-5 tracking-wide text-center text-[#8D8D8D] hover:underline w-full cursor-pointer"
+                  type="button"
+                >
+                  Skip for now
+                </button>
+              </div>
+            </div>
           </div>
         );
       default:

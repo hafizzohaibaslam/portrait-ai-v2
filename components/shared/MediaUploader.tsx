@@ -227,7 +227,7 @@ const FileTypeCard = ({
   };
 
   return (
-    <label className="h-[122px] w-[240px] rounded-[14px] cursor-pointer border border-gray-9 flex flex-col gap-[17px] items-center justify-center">
+    <label className="mx-auto h-[122px] w-[240px] rounded-[14px] cursor-pointer border border-gray-9 flex flex-col gap-[17px] items-center justify-center">
       <div className="bg-accent-purple-001 p-[10px] rounded-[10px] w-[40px] h-[40px] flex items-center justify-center text-dominant-purple-main">
         <Icon className="w-[20px] h-[20px]" />
       </div>
@@ -251,7 +251,7 @@ const FileTypeCards = ({
   onFileSelect: (files: File[]) => void;
 }) => {
   return (
-    <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div className="mt-8 grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
       {FILE_TYPES.map((type, index) => (
         <FileTypeCard key={index} type={type} onFileSelect={onFileSelect} />
       ))}
@@ -344,7 +344,7 @@ const MediaUploader = ({
   );
 
   const containerClassName = cn(
-    hasFiles && "lg:flex lg:gap-4 items-stretch"
+    hasFiles && "flex flex-col lg:flex-row gap-4 items-stretch"
   );
 
   return (

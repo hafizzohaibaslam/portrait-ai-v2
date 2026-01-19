@@ -125,7 +125,7 @@ const StepAddMemories = ({
 
   return (
     <div className={cn("space-y-6")}>
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
         <div className="space-y-1 w-full max-w-[486px]">
         <h1 className="font-normal text-[28px] leading-[40px] tracking-[-3%] text-off-black">
           Add memories to portrait
@@ -134,7 +134,7 @@ const StepAddMemories = ({
         Enrich this portrait with images, videos, and more. You can be back to add more later or share with others to contribute
         </p>
         </div>
-        <button className="p-3 rounded-[24px] bg-accent-purple-001 flex items-center gap-1 font-normal text-[14px] leading-[16px] tracking-[1.5%] text-off-black hover:bg-accent-purple-001/80 transition-colors cursor-pointer">
+        <button className="w-fit p-3 rounded-[24px] bg-accent-purple-001 flex items-center gap-1 font-normal text-[14px] leading-[16px] tracking-[1.5%] text-off-black hover:bg-accent-purple-001/80 transition-colors cursor-pointer">
         <Image src="/icons/share-link.png" alt="share-link" width={20} height={20} className="w-[20px] h-[20px]"/>
         Share Portrait</button>
       </div>
